@@ -1,3 +1,5 @@
+
+
 # 1. Temperature label
 temperature = float(input("Enter the temperature in °C: "))
 
