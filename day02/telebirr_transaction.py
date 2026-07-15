@@ -22,7 +22,6 @@ try:
     with open("report.txt", "w") as report:
         for name, total in trans_sorted:
             line = f"{name}: {total} ETB\n"
-           
             print(line.strip())     
             report.write(line)
 except FileNotFoundError:
