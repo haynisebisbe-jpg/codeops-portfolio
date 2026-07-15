@@ -8,9 +8,10 @@ def tire(balance):
     elif balance < 500:
         return ("basic")
 for name, balance in customers:
-    print(name , tire(balance),balance ,"ETB")
-    tires.append(tire(balance))
+    print(name , tire(balance),balance ,"ETB")  
+tires.append(tire(balance))
 print("\nTier counts:")
 print("premium:", tires.count("premium"))
 print("standard:", tires.count("standard"))
-print("basic:", tires.count("basic"))
+print("basic:", tires.count("basic")
+      

@@ -1,0 +1,6 @@
+kirubel : 10000 ETB
+Natan: 1300 ETB
+kebede: 500 ETB
+Hana : 500 ETB
+Hilina: 300 ETB
+john: -100 ETB
