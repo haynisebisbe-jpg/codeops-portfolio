@@ -1,0 +1,7 @@
+Natan,800
+kebede,500 
+kirubel ,10000 
+Hana ,500 
+john,-100 
+Hilina,300
+Natan,500
