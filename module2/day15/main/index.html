@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Responsive Menu</title>
+    <style>
+    body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    background: #f7f9fc;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    }
+    h1 {
+    text-align: center;
+    padding: 1rem;
+    color: #1d0066ba;
+    }
+    .menu {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: auto;
+    }
+    .card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card img {
+    width: 100%;
+    border-radius: 6px;
+    }
+    .card h2 {
+    margin: 0.5rem 0;
+    color: #1d0066ba;
+    }
+    .card p {
+    color: #555555;
+    }
+    .price {
+    display: block;
+    margin-top: 0.5rem;
+    font-weight: bold;
+    color: #008000;
+    font-size: 1.1rem;
+    }
+    .card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    @media (prefers-reduced-motion: reduce) {
+    .card {
+        transition: none;
+    }
+    .card:hover {
+        transform: none;
+    }
+    }
+    @media (min-width: 768px) {
+    .menu {
+        grid-template-columns: 1fr 1fr;
+    }
+    }
+    @media (min-width: 1024px) {
+    .menu {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    }
+    .footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    }
+</style>
+</head>
+<body>
+    <h1>Our Menu</h1>
+    <section class="menu">
+    <div class="card">
+    <img src="dulet.jpeg" alt="Dish 1 is dulet"width="50" height="250">
+    <h2>Dulet</h2>
+    <p>ethiopian popular dish dulet served with injera.</p>
+    <span class="price">2000ETB</span>
+    </div>
+    <div class="card">
+    <img src="ayb.jpeg" alt="Dish 2 is AYB served with kocho"width="50" height="450">
+    <h2>AYB Served with Kocho</h2>
+    <p>Traditional Ethiopian dish served with kocho.</p>
+    <span class="price">1500ETB</span>
+    </div>
+    <div class="card">
+    <img src="shekla.jpeg" alt="Dish 3 is shekla tbis"width="50" height="450">
+    <h2> special Shekla tibis</h2>
+    <p>Special Ethiopian favourite dish.</p>
+    <span class="price">3000ETB</span>
+    </div>
+    <div class="card">
+    <img src="rice.jpeg" alt="Dish 4 is rice with vegetables" width="50" height="450">
+    <h2>Rice with Vegetables</h2>
+    <p>Warm rice served with a fresh vegetable medley.</p>
+    <span class="price">772ETB</span>
+    </div>
+</section>
+<footer class="footer">
+    <p>© 2026 Habesha Eatery | Your Favorite Taste of Ethiopia</p>
+</footer>
+</body>
+</html>
