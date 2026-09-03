@@ -1,21 +1,48 @@
-import Dish from "./Dish";
-import Card from "./Card";
-import menuItems from ". /data";
+import { useState, useEffect, useRef } from "react";
+import { loadDishes } from "./api";
+import DishList from "./DishList";
+import CategoryBar from "./CategoryBar";
 
-function Menu({ category }) {
-  const filtered = menuItems.filter(item => item.category === category);
+function Menu() {
+  const [category, setCategory] = useState("All");
+  const [dishes, setDishes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const searchRef = useRef(null);
 
-  if (filtered.length === 0) {
-    return <p>No dishes found in this category.</p>;
-  }
+  // Focus search field on mount (safe check)
+  useEffect(() => {
+    if (searchRef.current) {
+      searchRef.current.focus();
+    }
+  }, []);
+
+  // Fetch dishes whenever category changes
+  useEffect(() => {
+    const ctrl = new AbortController();
+    setLoading(true);
+    setError(null);
+
+    loadDishes(category, ctrl.signal)
+      .then(setDishes)
+      .catch(e => {
+        if (e.name !== "AbortError") setError(e.message);
+      })
+      .finally(() => setLoading(false));
+
+    return () => ctrl.abort(); // cleanup
+  }, [category]);
+
+  // Early returns for loading/error/empty
+  if (loading) return <p>Loading the menu...</p>;
+  if (error) return <p className="err">{error}</p>;
+  if (dishes.length === 0) return <p>No dishes yet.</p>;
 
   return (
-    <div className="menu-grid">
-      {filtered.map(item => (
-        <Card key={item.id}>
-          <Dish {...item} />
-        </Card>
-      ))}
+    <div>
+      <input ref={searchRef} placeholder="Search dishes..." />
+      <CategoryBar category={category} setCategory={setCategory} />
+      <DishList dishes={dishes} />
     </div>
   );
 }

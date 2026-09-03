@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Shiro", "price": 50, "category": "Vegan", "spicy": false },
+  { "id": 2, "name": "Tibs", "price": 120, "category": "Grill", "spicy": true },
+  { "id": 3, "name": "Kitfo", "price": 150, "category": "Grill", "spicy": true }
+]
