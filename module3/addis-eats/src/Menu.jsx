@@ -11,11 +11,11 @@ function Menu() {
   const searchRef = useRef(null);
 
   // Focus search field on mount (safe check)
-  useEffect(() => {
-    if (searchRef.current) {
-      searchRef.current.focus();
-    }
-  }, []);
+useEffect(() => {
+  if (!loading && searchRef.current) {
+    searchRef.current.focus();
+  }
+}, [loading]);
 
   // Fetch dishes whenever category changes
   useEffect(() => {
@@ -40,7 +40,11 @@ function Menu() {
 
   return (
     <div>
-      <input ref={searchRef} placeholder="Search dishes..." />
+    <input
+  ref={searchRef}
+  placeholder="Search dishes..."
+  autoFocus
+/>
       <CategoryBar category={category} setCategory={setCategory} />
       <DishList dishes={dishes} />
     </div>
