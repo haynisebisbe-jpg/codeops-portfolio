@@ -1,0 +1,36 @@
+{
+  "dishes": [
+    {
+      "id": 1,
+      "name": "Shiro",
+      "price": 50,
+      "spicy": false,
+      "category": "Vegetarian",
+      "image": "/images/shiro.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Doro Wat",
+      "price": 120,
+      "spicy": true,
+      "category": "Meat",
+      "image": "/images/doro.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Kitfo",
+      "price": 150,
+      "spicy": true,
+      "category": "Meat",
+      "image": "/images/kitfo.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Injera",
+      "price": 20,
+      "spicy": false,
+      "category": "Staple",
+      "image": "/images/injera.jpg"
+    }
+  ]
+}

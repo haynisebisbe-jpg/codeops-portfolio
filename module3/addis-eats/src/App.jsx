@@ -1,11 +1,16 @@
+import Header from "./Header";
 import Menu from "./Menu";
+import Cart from "./Cart/Cart";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <h1>Addis Eats</h1>
+      <Header />
+
       <Menu />
+
+      <Cart />
     </div>
   );
 }
