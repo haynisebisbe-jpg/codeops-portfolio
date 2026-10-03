@@ -1,10 +1,13 @@
+import { Link } from "react-router-dom";
 import Dish from "./Dish";
 
 function DishList({ dishes }) {
   return (
     <div className="dish-list">
-      {dishes.map(d => (
-        <Dish key={d.id} {...d} />
+      {dishes.map((dish) => (
+        <Link key={dish.id} to={`/menu/${dish.id}`}>
+          <Dish {...dish} />
+        </Link>
       ))}
     </div>
   );

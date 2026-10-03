@@ -1,10 +1,15 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useFetch } from "./hooks/useFetch";
 import DishList from "./DishList";
 import CategoryBar from "./CategoryBar";
 
 function Menu() {
-  const [category, setCategory] = useState("All");
+  const [params, setParams] = useSearchParams();
+const category = params.get("category") ?? "All";
+function choose(cat) {
+  setParams({ category: cat });
+}
   const [search, setSearch] = useState("");
   const searchRef = useRef(null);
 
@@ -33,9 +38,9 @@ function Menu() {
   if (error) return <p className="err">{error}</p>;
 
   // Empty menu
-  if (dishes.length === 0) {
-    return <p>No dishes yet.</p>;
-  }
+ if (!dishes || dishes.length === 0) {
+  return <p>No dishes yet.</p>;
+}
 
   return (
     <div>
@@ -45,11 +50,11 @@ function Menu() {
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search dishes..."
       />
-
       <CategoryBar
-        category={category}
-        setCategory={setCategory}
-      />
+      category={category}
+      setCategory={choose}
+/>
+      
 
       <DishList dishes={filteredDishes} />
     </div>
