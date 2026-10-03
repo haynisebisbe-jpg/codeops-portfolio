@@ -5,9 +5,13 @@ function DishList({ dishes }) {
   return (
     <div className="dish-list">
       {dishes.map((dish) => (
-        <Link key={dish.id} to={`/menu/${dish.id}`}>
+        <div key={dish.id}>
+          <Link to={`/menu/${dish.id}`}>
+            <h3>{dish.name}</h3>
+          </Link>
+
           <Dish {...dish} />
-        </Link>
+        </div>
       ))}
     </div>
   );

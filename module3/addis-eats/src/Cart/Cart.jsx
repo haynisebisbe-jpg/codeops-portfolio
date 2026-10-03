@@ -1,8 +1,14 @@
-import { useContext } from "react";
-import { CartContext } from "./CartContext";
+import { useCartStore } from "./cartStore";
 
 function Cart() {
-const { items, dispatch, total } = useContext(CartContext);
+  const items = useCartStore((state) => state.items);
+  const remove = useCartStore((state) => state.remove);
+  const clear = useCartStore((state) => state.clear);
+
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="cart">
@@ -20,21 +26,15 @@ const { items, dispatch, total } = useContext(CartContext);
 
               <p>Quantity: {dish.quantity}</p>
 
-              <button
-                onClick={() =>
-                  dispatch({
-                    type: "remove",
-                    id: dish.id,
-                  })
-                }
-              >
+              <button onClick={() => remove(dish.id)}>
                 Remove
               </button>
             </div>
           ))}
+
           <p>Total: {total} ETB</p>
 
-          <button onClick={() => dispatch({ type: "clear" })}>
+          <button onClick={clear}>
             Clear Cart
           </button>
         </>

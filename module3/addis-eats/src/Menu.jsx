@@ -27,7 +27,7 @@ function choose(cat) {
     if (!dishes) return [];
 
     return dishes.filter((dish) =>
-      dish.name.toLowerCase().includes(search.toLowerCase())
+      dish.nameEn.toLowerCase().includes(search.toLowerCase())
     );
   }, [dishes, search]);
 

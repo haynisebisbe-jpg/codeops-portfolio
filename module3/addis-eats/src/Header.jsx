@@ -1,21 +1,11 @@
-import { useContext } from "react";
-import { CartContext } from "./Cart/CartContext";
+import CartBadge from "./CartBadge";
 
 function Header() {
-  const { items } = useContext(CartContext);
-
-  const cartCount = items.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
-
   return (
     <header className="header">
       <h1>Addis Eats</h1>
-
       <p>Order great food across Addis</p>
-
-      <p>🛒 Cart: {cartCount}</p>
+      <CartBadge />
     </header>
   );
 }
