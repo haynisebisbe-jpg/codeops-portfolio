@@ -1,83 +1,171 @@
-/* App.css */
-
-.App {
+body {
+  margin: 0;
   font-family: Arial, sans-serif;
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1rem;
+  background: #f7f7f7;
+  color: #222;
 }
 
-h1 {
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+header {
+  padding: 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+  margin: 0;
+}
+
+header p {
+  margin: 5px 0 0;
+}
+
+nav {
+  display: flex;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+main {
+  padding: 20px;
+}
+
+footer {
+  padding: 20px;
   text-align: center;
-  margin-bottom: 1rem;
+  background: #ffffff;
+  border-top: 1px solid #ddd;
 }
 
 input {
+  padding: 10px;
+  margin-bottom: 15px;
   width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  max-width: 400px;
+  box-sizing: border-box;
 }
 
-.category-bar {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.category-bar button {
-  flex: 1;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  background: #f5f5f5;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.category-bar button.active {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
+button {
+  padding: 8px 12px;
+  margin: 5px;
 }
 
 .dish-list {
   display: grid;
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.dish-list > div {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
 
 .dish {
-  border: 1px solid #ddd;
-  padding: 1rem;
-  border-radius: 6px;
-  background: #fafafa;
+  padding-top: 5px;
 }
 
 .dish h3 {
-  margin: 0 0 0.5rem;
-}
-
-.badge {
-  font-size: 0.9rem;
-  color: red;
-  margin-left: 0.3rem;
-}
-
-button {
-  padding: 0.4rem 0.8rem;
-  border: none;
-  background: #28a745;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-button:hover {
-  background: #218838;
+  margin-top: 0;
 }
 
 .err {
   color: red;
-  font-weight: bold;
+}
+
+.loading-skeleton {
+  padding: 20px;
+  text-align: center;
+}
+
+.error-boundary {
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Modal */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1000;
+
+  user-select: none;
+}
+
+.modal-backdrop-close {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  background: transparent;
+
+  cursor: default;
+}
+
+.modal {
+  position: relative;
+  z-index: 1;
+
+  width: min(90%, 500px);
+
+  background: white;
+
+  padding: 24px;
+
+  border-radius: 12px;
+
+  border: 2px solid #ddd;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+  user-select: text;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header button {
+  font-size: 24px;
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.modal-content {
+  margin-top: 16px;
 }

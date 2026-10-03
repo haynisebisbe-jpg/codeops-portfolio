@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { useCartStore } from "./Cart/cartStore";
 import OrderForm from "./OrderForm";
 
 function Checkout() {
+  const navigate = useNavigate();
+
   const items = useCartStore((state) => state.items);
   const clear = useCartStore((state) => state.clear);
 
@@ -13,7 +16,13 @@ function Checkout() {
   async function handleOrder(form) {
     console.log("Order information:", form);
 
-    alert("Order placed successfully!");
+    navigate("/receipt", {
+      state: {
+        form,
+        items,
+        total,
+      },
+    });
 
     clear();
   }
