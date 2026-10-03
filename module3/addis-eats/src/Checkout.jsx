@@ -1,4 +1,5 @@
 import { useCartStore } from "./Cart/cartStore";
+import OrderForm from "./OrderForm";
 
 function Checkout() {
   const items = useCartStore((state) => state.items);
@@ -9,8 +10,11 @@ function Checkout() {
     0
   );
 
-  function handleOrder() {
+  async function handleOrder(form) {
+    console.log("Order information:", form);
+
     alert("Order placed successfully!");
+
     clear();
   }
 
@@ -20,9 +24,10 @@ function Checkout() {
 
       <p>Total: {total} ETB</p>
 
-      <button onClick={handleOrder}>
-        Place Order
-      </button>
+      <OrderForm
+        total={total}
+        onPlaceOrder={handleOrder}
+      />
     </div>
   );
 }
