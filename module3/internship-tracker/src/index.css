@@ -1,0 +1,284 @@
+:root {
+  font-family: Arial, sans-serif;
+  color: #1f2937;
+  background: #f4f6f8;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f4f6f8;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Header */
+
+header {
+  background: #1e3a8a;
+  color: white;
+  padding: 20px 40px;
+}
+
+header h1 {
+  margin: 0 0 15px;
+  color: white;
+  font-size: 28px;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: white;
+  font-weight: bold;
+}
+
+/* Main content */
+
+main {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+main > div {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  margin-top: 0;
+  color: #1e3a8a;
+}
+
+h2 {
+  color: #374151;
+}
+
+p {
+  margin-bottom: 12px;
+}
+
+/* Application cards */
+
+article {
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+article h2 {
+  margin-top: 0;
+}
+
+/* Status badges */
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.status-applied {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-interview {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-offer {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Application details */
+
+.application-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detail-item {
+  padding: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-item strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+.detail-item p {
+  margin: 0;
+}
+
+/* Sections */
+
+section {
+  margin-bottom: 30px;
+}
+
+/* Dashboard summary */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.summary-card {
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.summary-card h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: #6b7280;
+}
+
+.summary-card p {
+  margin: 0;
+  font-size: 32px;
+  font-weight: bold;
+  color: #1e3a8a;
+}
+
+/* Forms */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+form div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+select,
+textarea {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #93c5fd;
+  border-color: #2563eb;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Buttons */
+
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+/* Footer */
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+}
+
+/* Tablet */
+
+@media (max-width: 800px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  header {
+    padding: 20px;
+  }
+
+  main {
+    margin: 20px auto;
+  }
+
+  main > div {
+    padding: 20px;
+  }
+
+  nav {
+    gap: 12px;
+  }
+}
+
+/* Small mobile */
+
+@media (max-width: 500px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
