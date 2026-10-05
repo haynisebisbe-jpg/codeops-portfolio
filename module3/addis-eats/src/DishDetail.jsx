@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { loadDishes } from "./api";
+import { useCartStore } from "./Cart/cartStore";
 
 function DishDetail() {
   const { id } = useParams();
@@ -8,6 +9,8 @@ function DishDetail() {
   const [dish, setDish] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const addItem = useCartStore((state) => state.addItem);
 
   useEffect(() => {
     async function fetchDish() {
@@ -28,6 +31,16 @@ function DishDetail() {
 
     fetchDish();
   }, [id]);
+
+  function handleAdd() {
+    addItem({
+      id: dish.id,
+      name: dish.nameEn,
+      price: dish.priceETB,
+      category: dish.category,
+      spiceLevel: dish.spiceLevel,
+    });
+  }
 
   if (loading) {
     return <p>Loading dish...</p>;
@@ -50,6 +63,8 @@ function DishDetail() {
       <p>Category: {dish.category}</p>
 
       <p>Spice Level: {dish.spiceLevel}</p>
+
+      <button onClick={handleAdd}>Add to Cart</button>
     </div>
   );
 }

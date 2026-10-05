@@ -1,0 +1,47 @@
+*{
+  margin:0%;
+  padding:0%;
+  box-sizing: border-box;
+}
+.container{
+  width:100%;
+  min-height: 100vh;
+}
+.content{
+display:flex;
+min-height: 400px;
+}
+.header{
+  height: 80px;
+  border: 2px solid black;
+  display :flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  
+}
+.nav{
+  width: 25%;
+  border: 2px solid black;
+  display :flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+}
+.main{
+  width: 75%;
+  border: 2px solid black;
+  display :flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+}
+.footer{
+  height: 80px;
+  border: 2px solid black;
+  display :flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+}
+
