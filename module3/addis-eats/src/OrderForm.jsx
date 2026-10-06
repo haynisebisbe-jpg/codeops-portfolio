@@ -6,7 +6,7 @@ function OrderForm({ total, onPlaceOrder }) {
     name: "",
     phone: "",
     area: "Bole",
-    notes: ""
+    notes: "",
   });
 
   const [touched, setTouched] = useState({});
@@ -18,7 +18,7 @@ function OrderForm({ total, onPlaceOrder }) {
 
     setForm((f) => ({
       ...f,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -27,7 +27,7 @@ function OrderForm({ total, onPlaceOrder }) {
 
     setTouched((t) => ({
       ...t,
-      [name]: true
+      [name]: true,
     }));
   };
 
@@ -44,7 +44,7 @@ function OrderForm({ total, onPlaceOrder }) {
       name: true,
       phone: true,
       area: true,
-      notes: true
+      notes: true,
     });
 
     const firstError = Object.keys(errors)[0];
@@ -60,7 +60,9 @@ function OrderForm({ total, onPlaceOrder }) {
     try {
       await onPlaceOrder(form);
     } catch (error) {
-      setServerError("Something went wrong. Please try again.");
+      setServerError(
+        "Something went wrong. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -74,102 +76,177 @@ function OrderForm({ total, onPlaceOrder }) {
   const showNotesError = touched.notes && errors.notes;
 
   return (
-    <form className="order-form" onSubmit={handleSubmit}>
-      <h3>Delivery Form</h3>
+    <form
+      className="order-form"
+      onSubmit={handleSubmit}
+      noValidate
+    >
+      <div className="order-form-intro">
+        <span className="order-form-icon">🛵</span>
 
-      <label htmlFor="name">Name</label>
-      <input
-        id="name"
-        name="name"
-        value={form.name}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        aria-invalid={!!showNameError}
-        aria-describedby={
-          showNameError ? "name-error" : undefined
-        }
-      />
+        <div>
+          <h3>Delivery Details</h3>
+          <p>
+            Please enter your information so we can
+            prepare your order.
+          </p>
+        </div>
+      </div>
 
-      {showNameError && (
-        <p id="name-error" role="alert">
-          {errors.name}
-        </p>
-      )}
+      <div className="order-field">
+        <label htmlFor="name">Full Name</label>
 
-      <label htmlFor="phone">TeleBirr Number</label>
-      <input
-        id="phone"
-        name="phone"
-        value={form.phone}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        aria-invalid={!!showPhoneError}
-        aria-describedby={
-          showPhoneError ? "phone-error" : undefined
-        }
-      />
+        <input
+          id="name"
+          name="name"
+          type="text"
+          value={form.name}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          placeholder="Enter your full name"
+          autoComplete="name"
+          aria-invalid={!!showNameError}
+          aria-describedby={
+            showNameError ? "name-error" : undefined
+          }
+          className={showNameError ? "input-error" : ""}
+        />
 
-      {showPhoneError && (
-        <p id="phone-error" role="alert">
-          {errors.phone}
-        </p>
-      )}
+        {showNameError && (
+          <p
+            id="name-error"
+            className="order-error"
+            role="alert"
+          >
+            {errors.name}
+          </p>
+        )}
+      </div>
 
-      <label htmlFor="area">Delivery Area</label>
-      <select
-        id="area"
-        name="area"
-        value={form.area}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        aria-invalid={!!showAreaError}
-        aria-describedby={
-          showAreaError ? "area-error" : undefined
-        }
-      >
-        <option value="Bole">Bole</option>
-        <option value="Kazanchis">Kazanchis</option>
-        <option value="Megenagna">Megenagna</option>
-        <option value="Piassa">Piassa</option>
-      </select>
+      <div className="order-field">
+        <label htmlFor="phone">
+          TeleBirr Number
+        </label>
 
-      {showAreaError && (
-        <p id="area-error" role="alert">
-          {errors.area}
-        </p>
-      )}
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          value={form.phone}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          placeholder="e.g. 0912345678"
+          autoComplete="tel"
+          aria-invalid={!!showPhoneError}
+          aria-describedby={
+            showPhoneError ? "phone-error" : undefined
+          }
+          className={showPhoneError ? "input-error" : ""}
+        />
 
-      <label htmlFor="notes">Notes (optional)</label>
-      <textarea
-        id="notes"
-        name="notes"
-        value={form.notes}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        maxLength={200}
-        aria-invalid={!!showNotesError}
-        aria-describedby={
-          showNotesError ? "notes-error" : undefined
-        }
-      />
+        {showPhoneError && (
+          <p
+            id="phone-error"
+            className="order-error"
+            role="alert"
+          >
+            {errors.phone}
+          </p>
+        )}
+      </div>
 
-      {showNotesError && (
-        <p id="notes-error" role="alert">
-          {errors.notes}
-        </p>
-      )}
+      <div className="order-field">
+        <label htmlFor="area">
+          Delivery Area
+        </label>
+
+        <select
+          id="area"
+          name="area"
+          value={form.area}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          aria-invalid={!!showAreaError}
+          aria-describedby={
+            showAreaError ? "area-error" : undefined
+          }
+          className={showAreaError ? "input-error" : ""}
+        >
+          <option value="Bole">Bole</option>
+          <option value="Kazanchis">Kazanchis</option>
+          <option value="Megenagna">Megenagna</option>
+          <option value="Piassa">Piassa</option>
+        </select>
+
+        {showAreaError && (
+          <p
+            id="area-error"
+            className="order-error"
+            role="alert"
+          >
+            {errors.area}
+          </p>
+        )}
+      </div>
+
+      <div className="order-field">
+        <div className="order-label-row">
+          <label htmlFor="notes">Notes</label>
+          <span>Optional</span>
+        </div>
+
+        <textarea
+          id="notes"
+          name="notes"
+          value={form.notes}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          maxLength={200}
+          placeholder="Any special instructions for your order?"
+          aria-invalid={!!showNotesError}
+          aria-describedby={
+            showNotesError ? "notes-error" : undefined
+          }
+          className={showNotesError ? "input-error" : ""}
+        />
+
+        <div className="order-character-count">
+          {form.notes.length}/200
+        </div>
+
+        {showNotesError && (
+          <p
+            id="notes-error"
+            className="order-error"
+            role="alert"
+          >
+            {errors.notes}
+          </p>
+        )}
+      </div>
 
       {serverError && (
-        <p role="alert">
-          {serverError}
-        </p>
+        <div
+          className="order-server-error"
+          role="alert"
+        >
+          ⚠️ {serverError}
+        </div>
       )}
 
-      <button type="submit" disabled={submitting}>
+      <button
+        type="submit"
+        className="order-submit-button"
+        disabled={submitting}
+      >
         {submitting
           ? "Sending your order..."
-          : `Order — ${total} ETB`}
+          : `Place Order — ${total} ETB`}
       </button>
+
+      <p className="order-secure-note">
+        🔒 Your order information is handled securely.
+      </p>
     </form>
   );
 }

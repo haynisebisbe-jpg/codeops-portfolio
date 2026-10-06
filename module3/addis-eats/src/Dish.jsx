@@ -1,13 +1,19 @@
 import { memo, useState } from "react";
+import { dishImages } from "./dishImages";
 import { useCartStore } from "./Cart/cartStore";
 import Modal from "./ui/Modal";
 
 function Dish({
   id,
   nameEn,
+  nameAm,
   priceETB,
   category,
   spiceLevel,
+  description,
+  ingredients,
+  servings,
+  tagline,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -31,25 +37,67 @@ function Dish({
     setIsModalOpen(false);
   }
 
+  const image = dishImages[nameEn];
+
   return (
     <>
       <div className="dish">
-        <p>{priceETB} ETB</p>
 
-        <p>{category}</p>
+        {image && (
+          <img
+            className="dish-image"
+            src={image}
+            alt={nameEn}
+          />
+        )}
 
-        <p>{spiceLevel}</p>
+        <div className="dish-price">
+          {priceETB} ETB
+        </div>
 
-        <button onClick={handleAdd}>
-          Add
-        </button>
+        <div className="dish-category">
+          {category}
+        </div>
 
-        <button
-          type="button"
-          onClick={openModal}
-        >
-          View Details
-        </button>
+        {tagline && (
+          <p className="dish-tagline">
+            {tagline}
+          </p>
+        )}
+
+        {description && (
+          <p className="dish-description">
+            {description}
+          </p>
+        )}
+
+        <div className="dish-spice">
+          <span>Spice</span>
+          <strong>{spiceLevel}</strong>
+        </div>
+
+        {servings && (
+          <div className="dish-serving">
+            {servings}
+          </div>
+        )}
+
+        <div className="dish-actions">
+          <button
+            className="dish-add-button"
+            onClick={handleAdd}
+          >
+            Add to Cart
+          </button>
+
+          <button
+            type="button"
+            className="dish-details-button"
+            onClick={openModal}
+          >
+            View Details
+          </button>
+        </div>
       </div>
 
       <Modal
@@ -57,19 +105,56 @@ function Dish({
         onClose={closeModal}
         title={nameEn}
       >
-        <p>
-          <strong>Price:</strong> {priceETB} ETB
-        </p>
+        {nameAm && (
+          <p className="modal-amharic">
+            {nameAm}
+          </p>
+        )}
 
-        <p>
-          <strong>Category:</strong> {category}
-        </p>
+        {description && (
+          <p className="modal-description">
+            {description}
+          </p>
+        )}
 
-        <p>
-          <strong>Spice Level:</strong> {spiceLevel}
-        </p>
+        <div className="modal-info">
+          <p>
+            <strong>Price:</strong> {priceETB} ETB
+          </p>
 
-        <button onClick={handleAdd}>
+          <p>
+            <strong>Category:</strong> {category}
+          </p>
+
+          <p>
+            <strong>Spice level:</strong> {spiceLevel}
+          </p>
+
+          {servings && (
+            <p>
+              <strong>Serving:</strong> {servings}
+            </p>
+          )}
+        </div>
+
+        {ingredients && ingredients.length > 0 && (
+          <div className="modal-ingredients">
+            <h3>Ingredients</h3>
+
+            <div className="ingredient-list">
+              {ingredients.map((ingredient) => (
+                <span key={ingredient}>
+                  {ingredient}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <button
+          className="modal-add-button"
+          onClick={handleAdd}
+        >
           Add to Cart
         </button>
       </Modal>

@@ -21,13 +21,30 @@ function DishList({ dishes }) {
     <Profiler id="DishList" onRender={handleProfile}>
       <div className="dish-list">
         {dishes.map((dish) => (
-          <div key={dish.id}>
-            <Link to={`/menu/${dish.id}`}>
+          <article className="dish-card" key={dish.id}>
+
+            {dish.isSpecial && (
+              <span className="dish-special">
+                Chef's Special
+              </span>
+            )}
+
+            <Link
+              className="dish-name-link"
+              to={`/menu/${dish.id}`}
+            >
               <h3>{dish.nameEn}</h3>
+
+              {dish.nameAm && (
+                <p className="dish-name-am">
+                  {dish.nameAm}
+                </p>
+              )}
             </Link>
 
             <Dish {...dish} />
-          </div>
+
+          </article>
         ))}
       </div>
     </Profiler>

@@ -9,16 +9,19 @@ const categories = [
 
 function CategoryBar({ category, setCategory }) {
   return (
-    <div className="category-bar">
-      {categories.map((c) => (
-        <button
-          key={c}
-          className={c === category ? "active" : ""}
-          onClick={() => setCategory(c)}
-        >
-          {c}
-        </button>
-      ))}
+    <div className="category-wrapper">
+      <div className="category-bar">
+        {categories.map((c) => (
+          <button
+            key={c}
+            type="button"
+            className={c === category ? "active" : ""}
+            onClick={() => setCategory(c)}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
