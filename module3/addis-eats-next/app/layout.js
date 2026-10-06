@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata = {
@@ -23,7 +24,7 @@ export default function RootLayout({ children }) {
           </nav>
         </header>
 
-        {children}
+        <Providers>{children}</Providers>
 
         <footer className="next-footer">
           <p>© 2026 Addis Eats. Authentic Ethiopian Flavors.</p>

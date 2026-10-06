@@ -387,3 +387,25 @@ body {
     flex-wrap: wrap;
   }
 }
+.category-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 25px 0;
+}
+
+.category-bar button {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #f7ead7;
+  color: #2d2118;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.category-bar button.active,
+.category-bar button:hover {
+  background: #a34a19;
+  color: white;
+}
