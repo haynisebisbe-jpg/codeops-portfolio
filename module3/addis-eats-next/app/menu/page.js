@@ -1,186 +1,228 @@
 import Link from "next/link";
+import { Suspense } from "react";
+
+export const revalidate = 3600;
 
 const dishes = [
   {
     id: "doro-wot",
     name: "Classic Doro Wat",
-    description: "Traditional Ethiopian chicken stew with berbere spices.",
     price: 450,
+    category: "Meat",
     image: "/images/doro wot.jpeg",
+    description: "Traditional Ethiopian chicken stew with berbere and spices.",
   },
   {
     id: "siga-wat",
     name: "Prime Siga Wat (Beef Stew)",
-    description: "Rich Ethiopian beef stew cooked with traditional spices.",
     price: 500,
+    category: "Meat",
     image: "/images/bozena.jpeg",
+    description: "Rich Ethiopian beef stew cooked with berbere spices.",
   },
   {
     id: "beg-alicha",
     name: "Beg Alicha Wat (Mild Lamb Stew)",
-    description: "Tender lamb stew prepared with mild Ethiopian spices.",
     price: 480,
+    category: "Meat",
     image: "/images/beg alcha.jpeg",
+    description: "Tender lamb prepared with mild Ethiopian spices.",
   },
   {
     id: "shiro-tegamino",
     name: "Clay-Pot Shiro Tegamino",
-    description: "Traditional shiro prepared in a clay pot.",
     price: 400,
+    category: "Vegan",
     image: "/images/tegabino.jpeg",
+    description: "Smooth chickpea stew served in traditional Ethiopian style.",
   },
   {
     id: "shiro-bozena",
     name: "Shiro Bozena (Beef Enriched Shiro)",
-    description: "Creamy shiro enriched with tender beef.",
     price: 450,
+    category: "Meat",
     image: "/images/bozena.jpeg",
+    description: "Creamy shiro enriched with tender beef.",
   },
   {
     id: "derek-tibs",
     name: "Crisp Siga Derek Tibs",
-    description: "Tender beef sautéed with Ethiopian spices.",
     price: 520,
+    category: "Meat",
     image: "/images/derek tibs.jpeg",
+    description: "Tender beef pieces sautéed with aromatic spices.",
   },
   {
     id: "awaze-tibs",
     name: "Awaze Lamb Tibs",
-    description: "Tender lamb sautéed with onions, peppers and awaze.",
     price: 550,
+    category: "Meat",
     image: "/images/awaze tibs.jpg",
+    description: "Spicy lamb tibs prepared with flavorful awaze sauce.",
   },
   {
     id: "quanta-firfir",
     name: "Spicy Quanta Firfir",
-    description: "Traditional shredded injera mixed with spicy dried meat.",
     price: 420,
+    category: "Meat",
     image: "/images/kuanta frfr.jpeg",
+    description: "Shredded injera mixed with spicy dried meat.",
   },
   {
     id: "asa-tibs",
     name: "Lake Tana Crispy Fish Tibs",
-    description: "Crispy fish prepared with Ethiopian herbs and spices.",
     price: 480,
+    category: "Meat",
     image: "/images/asa tbs.jpg",
+    description: "Crispy fish prepared with Ethiopian spices.",
   },
   {
     id: "kitfo",
     name: "Prime Beef Kitfo",
-    description: "Seasoned minced beef served with traditional accompaniments.",
     price: 500,
+    category: "Meat",
     image: "/images/kitfo.jpeg",
+    description: "Traditional Ethiopian minced beef seasoned with mitmita.",
   },
   {
     id: "gored-gored",
     name: "Highland Gored Gored",
-    description: "Traditional Ethiopian beef dish seasoned with spices.",
     price: 520,
+    category: "Meat",
     image: "/images/gored.webp",
+    description: "Traditional cubed beef dish with Ethiopian spices.",
   },
   {
     id: "dulet",
     name: "Addis Style Dulet",
-    description: "Classic Ethiopian minced meat dish with spices.",
     price: 430,
+    category: "Meat",
     image: "/images/dulet.jpeg",
+    description: "Classic Ethiopian minced meat specialty.",
   },
   {
     id: "beyaynetu",
     name: "Full Vegan Beyaynetu Platter",
-    description: "A colorful platter of traditional Ethiopian vegan dishes.",
     price: 400,
+    category: "Vegan",
     image: "/images/Beyaynetu.jpeg",
+    description: "A colorful selection of traditional Ethiopian vegan dishes.",
   },
   {
     id: "misir",
     name: "Highland Red Misir Wat",
-    description: "Spicy red lentil stew cooked with berbere.",
     price: 350,
+    category: "Vegan",
     image: "/images/misir.jpeg",
+    description: "Spicy red lentil stew with Ethiopian berbere.",
   },
   {
     id: "kik",
     name: "Golden Kik Alicha",
-    description: "Mild yellow split-pea stew with Ethiopian spices.",
     price: 350,
+    category: "Vegan",
     image: "/images/kik.jpeg",
+    description: "Mild yellow split-pea stew.",
   },
   {
     id: "gomen",
     name: "Braised Ye'abesha Gomen",
-    description: "Slow-cooked Ethiopian collard greens.",
     price: 350,
+    category: "Vegan",
     image: "/images/gomen.jpeg",
+    description: "Slow-cooked Ethiopian collard greens.",
   },
   {
     id: "timatim",
     name: "Fresh Timatim Fitfit",
-    description: "Fresh tomatoes mixed with torn injera and spices.",
     price: 320,
+    category: "Vegan",
     image: "/images/timatim fitfit.jpeg",
+    description: "Fresh tomatoes mixed with pieces of injera.",
   },
   {
     id: "tej",
     name: "House Fermented Tej (500ml Carafe)",
-    description: "Traditional Ethiopian honey wine served chilled.",
     price: 600,
+    category: "Drinks",
     image: "/images/tej.jpg",
+    description: "Traditional Ethiopian honey wine.",
   },
   {
     id: "buna",
     name: "Traditional Jebena Coffee",
-    description: "Freshly roasted Ethiopian coffee prepared traditionally.",
     price: 180,
+    category: "Drinks",
     image: "/images/buna.jpeg",
+    description: "Freshly roasted Ethiopian coffee prepared in a jebena.",
   },
   {
     id: "tea",
     name: "Highland Spiced Shai",
-    description: "Warm Ethiopian spiced tea.",
     price: 150,
+    category: "Drinks",
     image: "/images/tea.jpeg",
+    description: "Warm Ethiopian spiced tea.",
   },
 ];
+
+function MenuList() {
+  return (
+    <div className="next-dish-grid">
+      {dishes.map((dish) => (
+        <article className="next-dish-card" key={dish.id}>
+          <img
+            src={dish.image}
+            alt={dish.name}
+            className="next-dish-image"
+          />
+
+          <div className="next-dish-content">
+            <span className="next-category">{dish.category}</span>
+
+            <h2>{dish.name}</h2>
+
+            <p>{dish.description}</p>
+
+            <strong>{dish.price} ETB</strong>
+
+            <Link href={`/menu/${dish.id}`} className="next-button">
+              View Dish
+            </Link>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function MenuSkeleton() {
+  return (
+    <div className="next-loading">
+      <div className="next-spinner">🍽️</div>
+      <h2>Preparing the dishes...</h2>
+      <p>Our kitchen is getting everything ready.</p>
+    </div>
+  );
+}
 
 export default function MenuPage() {
   return (
     <main className="next-page">
-      <p className="next-eyebrow">FROM OUR KITCHEN</p>
+      <section className="next-hero">
+        <p className="next-eyebrow">AUTHENTIC ETHIOPIAN FOOD</p>
 
-      <h1>Our Menu</h1>
+        <h1>Our Menu</h1>
 
-      <p className="next-intro">
-        Discover traditional Ethiopian flavors, lovingly prepared with
-        authentic spices and ingredients.
-      </p>
+        <p>
+          Discover traditional Ethiopian flavors prepared with love
+          and served fresh.
+        </p>
+      </section>
 
-      <div className="next-dish-grid">
-        {dishes.map((dish) => (
-          <article className="next-dish-card" key={dish.id}>
-            <img
-              src={dish.image}
-              alt={dish.name}
-              className="next-dish-image"
-            />
-
-            <div className="next-dish-content">
-              <h2>{dish.name}</h2>
-
-              <p>{dish.description}</p>
-
-              <strong>{dish.price} ETB</strong>
-
-              <Link
-                href={`/menu/${dish.id}`}
-                className="next-link"
-              >
-                View Details →
-              </Link>
-            </div>
-          </article>
-        ))}
-      </div>
+      <Suspense fallback={<MenuSkeleton />}>
+        <MenuList />
+      </Suspense>
     </main>
   );
 }

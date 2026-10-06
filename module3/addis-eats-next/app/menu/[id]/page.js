@@ -4,144 +4,190 @@ import { notFound } from "next/navigation";
 const dishes = {
   "doro-wot": {
     name: "Classic Doro Wat",
-    description: "Traditional Ethiopian chicken stew with berbere spices.",
     price: 450,
+    category: "Meat",
     image: "/images/doro wot.jpeg",
+    description:
+      "Traditional Ethiopian chicken stew slowly cooked with berbere, onions, garlic, and aromatic spices.",
   },
 
   "siga-wat": {
     name: "Prime Siga Wat (Beef Stew)",
-    description: "Rich Ethiopian beef stew cooked with traditional spices.",
     price: 500,
+    category: "Meat",
     image: "/images/bozena.jpeg",
+    description:
+      "Rich Ethiopian beef stew prepared with berbere spices and slowly cooked onions.",
   },
 
   "beg-alicha": {
     name: "Beg Alicha Wat (Mild Lamb Stew)",
-    description: "Tender lamb stew prepared with mild Ethiopian spices.",
     price: 480,
+    category: "Meat",
     image: "/images/beg alcha.jpeg",
+    description:
+      "Tender lamb prepared with mild Ethiopian spices.",
   },
 
   "shiro-tegamino": {
     name: "Clay-Pot Shiro Tegamino",
-    description: "Traditional shiro prepared in a clay pot.",
     price: 400,
+    category: "Vegan",
     image: "/images/tegabino.jpeg",
+    description:
+      "Smooth chickpea stew served in traditional Ethiopian style.",
   },
 
   "shiro-bozena": {
     name: "Shiro Bozena (Beef Enriched Shiro)",
-    description: "Creamy shiro enriched with tender beef.",
     price: 450,
+    category: "Meat",
     image: "/images/bozena.jpeg",
+    description:
+      "Creamy shiro enriched with tender beef.",
   },
 
   "derek-tibs": {
     name: "Crisp Siga Derek Tibs",
-    description: "Tender beef sautéed with Ethiopian spices.",
     price: 520,
+    category: "Meat",
     image: "/images/derek tibs.jpeg",
+    description:
+      "Tender beef pieces sautéed with aromatic Ethiopian spices.",
   },
 
   "awaze-tibs": {
     name: "Awaze Lamb Tibs",
-    description: "Tender lamb sautéed with onions, peppers and awaze.",
     price: 550,
+    category: "Meat",
     image: "/images/awaze tibs.jpg",
+    description:
+      "Spicy lamb tibs prepared with flavorful awaze sauce.",
   },
 
   "quanta-firfir": {
     name: "Spicy Quanta Firfir",
-    description: "Traditional shredded injera mixed with spicy dried meat.",
     price: 420,
+    category: "Meat",
     image: "/images/kuanta frfr.jpeg",
+    description:
+      "Shredded injera mixed with spicy dried meat.",
   },
 
   "asa-tibs": {
     name: "Lake Tana Crispy Fish Tibs",
-    description: "Crispy fish prepared with Ethiopian herbs and spices.",
     price: 480,
+    category: "Meat",
     image: "/images/asa tbs.jpg",
+    description:
+      "Crispy fish prepared with Ethiopian spices.",
   },
 
   kitfo: {
     name: "Prime Beef Kitfo",
-    description: "Seasoned minced beef served with traditional accompaniments.",
     price: 500,
+    category: "Meat",
     image: "/images/kitfo.jpeg",
+    description:
+      "Traditional Ethiopian minced beef seasoned with mitmita.",
   },
 
   "gored-gored": {
     name: "Highland Gored Gored",
-    description: "Traditional Ethiopian beef dish seasoned with spices.",
     price: 520,
+    category: "Meat",
     image: "/images/gored.webp",
+    description:
+      "Traditional cubed beef dish with Ethiopian spices.",
   },
 
   dulet: {
     name: "Addis Style Dulet",
-    description: "Classic Ethiopian minced meat dish with spices.",
     price: 430,
+    category: "Meat",
     image: "/images/dulet.jpeg",
+    description:
+      "Classic Ethiopian minced meat specialty.",
   },
 
   beyaynetu: {
     name: "Full Vegan Beyaynetu Platter",
-    description: "A colorful platter of traditional Ethiopian vegan dishes.",
     price: 400,
+    category: "Vegan",
     image: "/images/Beyaynetu.jpeg",
+    description:
+      "A colorful selection of traditional Ethiopian vegan dishes.",
   },
 
   misir: {
     name: "Highland Red Misir Wat",
-    description: "Spicy red lentil stew cooked with berbere.",
     price: 350,
+    category: "Vegan",
     image: "/images/misir.jpeg",
+    description:
+      "Spicy red lentil stew with Ethiopian berbere.",
   },
 
   kik: {
     name: "Golden Kik Alicha",
-    description: "Mild yellow split-pea stew with Ethiopian spices.",
     price: 350,
+    category: "Vegan",
     image: "/images/kik.jpeg",
+    description:
+      "Mild yellow split-pea stew.",
   },
 
   gomen: {
     name: "Braised Ye'abesha Gomen",
-    description: "Slow-cooked Ethiopian collard greens.",
     price: 350,
+    category: "Vegan",
     image: "/images/gomen.jpeg",
+    description:
+      "Slow-cooked Ethiopian collard greens.",
   },
 
   timatim: {
     name: "Fresh Timatim Fitfit",
-    description: "Fresh tomatoes mixed with torn injera and spices.",
     price: 320,
+    category: "Vegan",
     image: "/images/timatim fitfit.jpeg",
+    description:
+      "Fresh tomatoes mixed with pieces of injera.",
   },
 
   tej: {
     name: "House Fermented Tej (500ml Carafe)",
-    description: "Traditional Ethiopian honey wine served chilled.",
     price: 600,
+    category: "Drinks",
     image: "/images/tej.jpg",
+    description:
+      "Traditional Ethiopian honey wine.",
   },
 
   buna: {
     name: "Traditional Jebena Coffee",
-    description: "Freshly roasted Ethiopian coffee prepared traditionally.",
     price: 180,
+    category: "Drinks",
     image: "/images/buna.jpeg",
+    description:
+      "Freshly roasted Ethiopian coffee prepared in a jebena.",
   },
 
   tea: {
     name: "Highland Spiced Shai",
-    description: "Warm Ethiopian spiced tea.",
     price: 150,
+    category: "Drinks",
     image: "/images/tea.jpeg",
+    description:
+      "Warm Ethiopian spiced tea.",
   },
 };
+
+export function generateStaticParams() {
+  return Object.keys(dishes).map((id) => ({
+    id,
+  }));
+}
 
 export default async function DishPage({ params }) {
   const { id } = await params;
@@ -154,9 +200,11 @@ export default async function DishPage({ params }) {
 
   return (
     <main className="next-page">
-      <p className="next-eyebrow">ADDIS EATS</p>
+      <Link href="/menu" className="next-back-link">
+        ← Back to Menu
+      </Link>
 
-      <div className="next-detail-card">
+      <section className="next-detail-card">
         <img
           src={dish.image}
           alt={dish.name}
@@ -164,25 +212,19 @@ export default async function DishPage({ params }) {
         />
 
         <div className="next-detail-content">
+          <span className="next-category">{dish.category}</span>
+
           <h1>{dish.name}</h1>
 
           <p>{dish.description}</p>
 
-          <strong className="next-price">
-            {dish.price} ETB
-          </strong>
+          <h2>{dish.price} ETB</h2>
 
-          <div className="next-actions">
-            <Link href="/menu" className="next-button">
-              ← Back to Menu
-            </Link>
-
-            <Link href="/cart" className="next-link">
-              Go to Cart →
-            </Link>
-          </div>
+          <Link href="/checkout" className="next-button">
+            Continue to Checkout
+          </Link>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
