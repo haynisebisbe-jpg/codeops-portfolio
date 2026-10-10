@@ -1,10 +1,10 @@
 # Addis Eats — Server / Client Boundary
 
-## Day 38: Server & Client Components
+## Day 40 Server / Client Boundary
 
 ### Server Components
 
-The following components remain Server Components:
+The following remain Server Components:
 
 - `app/layout.js`
 - `app/page.js`
@@ -12,25 +12,63 @@ The following components remain Server Components:
 - `app/menu/[id]/page.js`
 - `app/menu/layout.js`
 - `app/cart/page.js`
+- `app/checkout/page.js`
 
-The menu page is an async Server Component. It awaits the menu data on the server instead of using the client-side `useFetch` hook.
+Server Components are used for routing, data fetching, layouts,
+static pages, and server-side authentication checks.
 
 ### Client Components
 
-Only these files use `"use client"`:
+These components use `"use client"` because they need browser
+interactivity or React client state:
 
-- `app/CategoryBar.jsx` — uses `useState` and button click events.
-- `app/FilterShell.jsx` — provides the client boundary and receives server content through `children`.
-- `app/providers.jsx` — contains the Cart Provider using React context and `useReducer`.
-- `app/menu/error.js` — required by the Next.js error boundary.
+- `app/providers.jsx`
+  - Cart context
+  - useReducer
+  - client state
 
-### Server Component Passed Through Client Component
+- `app/CategoryBar.jsx`
+  - category selection
+  - click events
 
-`FilterShell` receives the server-rendered menu content through `children`.
+- `app/FilterShell.jsx`
+  - client-side filtering boundary
 
-```jsx
-<FilterShell>
-  <Suspense fallback={<MenuSkeleton />}>
-    <MenuList />
-  </Suspense>
-</FilterShell>
+- `app/menu/error.js`
+  - Next.js client error boundary
+
+- `app/menu/[id]/AddToCartButton.jsx`
+  - button click
+  - dispatches cart action
+
+- `app/cart/CartView.jsx`
+  - reads cart context
+  - removes items
+  - clears cart
+
+- `app/checkout/CheckoutForm.jsx`
+  - useActionState
+  - form submission
+  - pending state
+  - validation messages
+
+### Important Boundary Rule
+
+Interactive state stays in client components.
+
+Server Components handle:
+
+- routing
+- data fetching
+- authentication checks
+- server rendering
+
+Client Components handle:
+
+- clicks
+- cart state
+- forms
+- browser interaction
+
+The checkout page itself remains a Server Component while the
+interactive checkout form is isolated in `CheckoutForm.jsx`.

@@ -63,7 +63,9 @@ export async function cancelOrder(orderId) {
   }
 
   if (order.userId !== session.id) {
-    throw new Error("You are not allowed to cancel this order");
+    throw new Error(
+      "You are not allowed to cancel this order"
+    );
   }
 
   const cancelledOrder = await markCancelled(orderId);

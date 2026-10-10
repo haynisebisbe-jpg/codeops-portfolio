@@ -1,8 +1,8 @@
 "use client";
 
 import { useReducer, useMemo } from "react";
-import { CartContext } from "./Cart/CartContext";
-import { cartReducer } from "./Cart/cartReducer";
+import { CartContext } from "./cart/CartContext";
+import { cartReducer } from "./cart/cartReducer";
 
 function CartProvider({ children }) {
   const [state, dispatch] = useReducer(cartReducer, {
@@ -10,7 +10,13 @@ function CartProvider({ children }) {
     total: 0,
   });
 
-  const value = useMemo(() => ({ ...state, dispatch }), [state]);
+  const value = useMemo(
+    () => ({
+      ...state,
+      dispatch,
+    }),
+    [state]
+  );
 
   return (
     <CartContext.Provider value={value}>

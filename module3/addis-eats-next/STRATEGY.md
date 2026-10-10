@@ -2,27 +2,30 @@
 
 ## Route Strategy
 
-| Route        | Strategy                        | Reason                                                                  |
-| ------------ | ------------------------------- | ----------------------------------------------------------------------- |
-| `/`          | Static                          | Homepage content does not depend on the visitor.                        |
-| `/menu`      | ISR - 1 hour                    | Menu data can change occasionally while keeping the page fast.          |
-| `/menu/[id]` | Static via generateStaticParams | Known dish pages can be generated at build time.                        |
-| `/cart`      | Client                          | Cart information belongs to the individual customer.                    |
-| `/checkout`  | Dynamic                         | Checkout information should be rendered fresh for the current customer. |
+| Route | Strategy | Reason |
+|---|---|---|
+| `/` | Static | Homepage content does not depend on the visitor. |
+| `/menu` | ISR - 1 hour | Menu information can change occasionally while remaining fast. |
+| `/menu/[id]` | Static via generateStaticParams | Known dish pages can be generated at build time. |
+| `/cart` | Client | Cart information belongs to the individual customer and uses client state. |
+| `/checkout` | Dynamic | Checkout is user-specific and checks the current session on the server. |
 
 ## Root Layout
 
 `app/layout.js` is the root layout.
 
-It contains the global HTML structure, header, navigation,
-footer, and global CSS.
+It contains:
 
-## Nested Menu Layout
+- global HTML structure
+- navigation
+- footer
+- global CSS
+- Providers
 
-`app/menu/layout.js` provides the menu sidebar.
+## Menu Layout
 
-Because it is a nested layout, the sidebar remains visible
-while navigating between the menu page and individual dishes.
+`app/menu/layout.js` provides the nested menu layout and keeps
+the menu navigation available while navigating between menu pages.
 
 ## Incremental Static Regeneration
 
@@ -30,4 +33,3 @@ The menu uses:
 
 ```js
 export const revalidate = 3600;
-```

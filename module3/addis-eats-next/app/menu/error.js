@@ -1,20 +1,23 @@
+
 "use client";
 
-export default function Error({ reset }) {
+export default function Error({
+  error,
+  reset,
+}) {
   return (
     <main className="next-page">
-      <div className="next-error">
-        <div className="next-big-icon">⚠️</div>
-
-        <h1>We couldn't load the menu</h1>
+      <div className="next-empty-card">
+        <h2>Something went wrong.</h2>
 
         <p>
-          Something went wrong while loading the menu.
+          We could not load the menu.
         </p>
 
         <button
-          onClick={() => reset()}
+          type="button"
           className="next-button"
+          onClick={() => reset()}
         >
           Try Again
         </button>

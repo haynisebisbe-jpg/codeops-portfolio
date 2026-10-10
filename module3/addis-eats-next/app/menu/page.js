@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import FilterShell from "../FilterShell";
 
 export const revalidate = 3600;
 
@@ -167,66 +166,59 @@ const dishes = [
   },
 ];
 
-/*
-  These functions run on the server because this file
-  is a Server Component.
-*/
 async function getDishes() {
   return dishes;
 }
 
-async function getCategories() {
-  return ["All", "Meat", "Vegan", "Drinks"];
-}
+async function MenuList({ selectedCategory }) {
+  const data = await getDishes();
 
-async function MenuList() {
-  // Fetch both pieces of server data in parallel.
-  const [data, categories] = await Promise.all([
-    getDishes(),
-    getCategories(),
-  ]);
+  const filteredDishes =
+    selectedCategory === "All"
+      ? data
+      : data.filter(
+          (dish) =>
+            dish.category.toLowerCase() ===
+            selectedCategory.toLowerCase()
+        );
+
+  if (filteredDishes.length === 0) {
+    return (
+      <div className="next-empty-card">
+        <p>No dishes found in this category.</p>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div className="next-page-heading">
-        <div>
-          <p className="next-eyebrow">OUR MENU</p>
+    <div className="next-menu-grid">
+      {filteredDishes.map((dish) => (
+        <article className="next-dish-card" key={dish.id}>
+          <img src={dish.image} alt={dish.name} />
 
-          <h1>Authentic Ethiopian Flavors</h1>
+          <div className="next-dish-body">
+            <span className="next-category">
+              {dish.category}
+            </span>
 
-          <p>Explore traditional dishes prepared with love.</p>
-        </div>
-      </div>
+            <h2>{dish.name}</h2>
 
-      <div className="next-menu-grid">
-        {data.map((dish) => (
-          <article className="next-dish-card" key={dish.id}>
-            <img src={dish.image} alt={dish.name} />
+            <p>{dish.description}</p>
 
-            <div className="next-dish-body">
-              <span className="next-category">
-                {dish.category}
-              </span>
+            <div className="next-dish-footer">
+              <strong>{dish.price} ETB</strong>
 
-              <h2>{dish.name}</h2>
-
-              <p>{dish.description}</p>
-
-              <div className="next-dish-footer">
-                <strong>{dish.price} ETB</strong>
-
-                <Link
-                  href={`/menu/${dish.id}`}
-                  className="next-button"
-                >
-                  View Dish
-                </Link>
-              </div>
+              <Link
+                href={`/menu/${dish.id}`}
+                className="next-button"
+              >
+                View Dish
+              </Link>
             </div>
-          </article>
-        ))}
-      </div>
-    </>
+          </div>
+        </article>
+      ))}
+    </div>
   );
 }
 
@@ -238,16 +230,28 @@ function MenuSkeleton() {
   );
 }
 
-export default async function MenuPage() {
-  const categories = await getCategories();
+export default async function MenuPage({ searchParams }) {
+  const params = await searchParams;
+
+  const selectedCategory = params?.category || "All";
 
   return (
     <main className="next-page">
-      <FilterShell categories={categories}>
-        <Suspense fallback={<MenuSkeleton />}>
-          <MenuList />
-        </Suspense>
-      </FilterShell>
+      <div className="next-page-heading">
+        <div>
+          <p className="next-eyebrow">OUR MENU</p>
+
+          <h1>Authentic Ethiopian Flavors</h1>
+
+          <p>
+            Explore traditional dishes prepared with love.
+          </p>
+        </div>
+      </div>
+
+      <Suspense fallback={<MenuSkeleton />}>
+        <MenuList selectedCategory={selectedCategory} />
+      </Suspense>
     </main>
   );
 }
