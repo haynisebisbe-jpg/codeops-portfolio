@@ -1,8 +1,8 @@
+
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
-import { useContext } from "react";
+import { useActionState, useContext } from "react";
 import { placeOrder } from "../actions";
 import { CartContext } from "../cart/CartContext";
 
@@ -20,19 +20,20 @@ export default function CheckoutForm() {
 
   const { items, total } = useContext(CartContext);
 
-  const firstItem = items[0];
-
   if (state.success) {
     return (
       <div className="checkout-placeholder">
         <h2>Order placed successfully! 🎉</h2>
 
         <p>
-          Your order ID is:
-          <strong> {state.orderId}</strong>
+          Your order ID: <strong>{state.orderId}</strong>
         </p>
 
         <p>Your order is currently pending.</p>
+
+        <p>
+          Order total: <strong>{state.total ?? total} ETB</strong>
+        </p>
 
         <Link href="/menu" className="next-button">
           Back to Menu
@@ -41,35 +42,56 @@ export default function CheckoutForm() {
     );
   }
 
+  if (items.length === 0) {
+    return (
+      <div className="next-empty-card">
+        <h2>Your cart is empty</h2>
+        <p>Add dishes to your cart before checkout.</p>
+
+        <Link href="/menu" className="next-button">
+          Browse Menu
+        </Link>
+      </div>
+    );
+  }
+
+  const submittedItems = items.map((item) => ({
+    dishId: item.id,
+    quantity: item.quantity,
+  }));
+
   return (
     <form action={formAction} className="checkout-form">
       {state.error && (
-        <p role="alert">
-          {state.error}
-        </p>
+        <p role="alert">{state.error}</p>
       )}
 
       <input
         type="hidden"
-        name="dishId"
-        value={firstItem?.id || ""}
+        name="items"
+        value={JSON.stringify(submittedItems)}
       />
 
-      <input
-        type="hidden"
-        name="quantity"
-        value={firstItem?.quantity || 1}
-      />
+      <h2>Your Order</h2>
+
+      {items.map((item) => (
+        <div key={item.id}>
+          <p>
+            {item.name} × {item.quantity}
+          </p>
+          <p>
+            Subtotal: {item.price * item.quantity} ETB
+          </p>
+        </div>
+      ))}
 
       <div>
-        <label htmlFor="name">
-          Full Name
-        </label>
-
+        <label htmlFor="name">Full Name</label>
         <input
           id="name"
           name="name"
           type="text"
+          minLength={2}
           required
         />
 
@@ -81,10 +103,7 @@ export default function CheckoutForm() {
       </div>
 
       <div>
-        <label htmlFor="phone">
-          Phone Number
-        </label>
-
+        <label htmlFor="phone">Phone Number</label>
         <input
           id="phone"
           name="phone"
@@ -101,10 +120,7 @@ export default function CheckoutForm() {
       </div>
 
       <div>
-        <label htmlFor="area">
-          Delivery Area
-        </label>
-
+        <label htmlFor="area">Delivery Area</label>
         <select id="area" name="area">
           <option value="Bole">Bole</option>
           <option value="Kazanchis">Kazanchis</option>
@@ -114,14 +130,12 @@ export default function CheckoutForm() {
       </div>
 
       <div>
-        <label htmlFor="notes">
-          Notes
-        </label>
-
+        <label htmlFor="notes">Notes</label>
         <textarea
           id="notes"
           name="notes"
-          rows="4"
+          rows={4}
+          maxLength={200}
         />
 
         {state.fieldErrors?.notes && (
@@ -131,32 +145,23 @@ export default function CheckoutForm() {
         )}
       </div>
 
-      <div>
-        <h3>
-          Cart Total: {total} ETB
-        </h3>
-      </div>
-
-      {state.fieldErrors?.quantity && (
+      {state.fieldErrors?.items && (
         <p role="alert">
-          {state.fieldErrors.quantity[0]}
+          {state.fieldErrors.items[0]}
         </p>
       )}
+
+      <h3>Cart Total: {total} ETB</h3>
 
       <button
         type="submit"
         className="next-button"
         disabled={pending}
       >
-        {pending
-          ? "Placing Order..."
-          : "Place Order"}
+        {pending ? "Placing Order..." : "Place Order"}
       </button>
 
-      <Link
-        href="/cart"
-        className="next-button"
-      >
+      <Link href="/cart" className="next-button">
         Back to Cart
       </Link>
     </form>

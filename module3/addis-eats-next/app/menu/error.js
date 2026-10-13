@@ -1,18 +1,11 @@
-
 "use client";
 
-export default function Error({
-  error,
-  reset,
-}) {
+export default function Error({ reset }) {
   return (
     <main className="next-page">
       <div className="next-empty-card">
         <h2>Something went wrong.</h2>
-
-        <p>
-          We could not load the menu.
-        </p>
+        <p>We could not load the menu.</p>
 
         <button
           type="button"

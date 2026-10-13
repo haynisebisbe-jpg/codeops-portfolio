@@ -1,10 +1,14 @@
 # Addis Eats — Server / Client Boundary
 
-## Day 40 Server / Client Boundary
+## 1. Purpose
 
-### Server Components
+This document explains how the Addis Eats Next.js application separates server-rendered work from interactive client-side behavior.
 
-The following remain Server Components:
+The project uses Server Components by default and Client Components when browser interaction or React client state is required.
+
+## 2. Server Components
+
+The following route and layout files are intended to remain Server Components:
 
 - `app/layout.js`
 - `app/page.js`
@@ -14,61 +18,56 @@ The following remain Server Components:
 - `app/cart/page.js`
 - `app/checkout/page.js`
 
-Server Components are used for routing, data fetching, layouts,
-static pages, and server-side authentication checks.
+Server Components handle responsibilities such as:
 
-### Client Components
+- Rendering route content on the server.
+- Loading or preparing data.
+- Defining shared and nested layouts.
+- Supporting static generation and dynamic rendering.
+- Performing server-side checks where required.
 
-These components use `"use client"` because they need browser
-interactivity or React client state:
+Server Components should not use browser-only hooks such as `useState` or click event handlers directly.
 
-- `app/providers.jsx`
-  - Cart context
-  - useReducer
-  - client state
+## 3. Client Components
 
-- `app/CategoryBar.jsx`
-  - category selection
-  - click events
+Client Components are used when a component requires browser interaction or client-side React state.
 
-- `app/FilterShell.jsx`
-  - client-side filtering boundary
+The project's interactive components include:
 
-- `app/menu/error.js`
-  - Next.js client error boundary
+- `app/providers.jsx` — provides client-side context and cart state.
+- `app/menu/error.js` — displays the menu error boundary and its retry button.
+- `app/menu/[id]/AddToCartButton.jsx` — handles adding a dish to the cart.
+- `app/cart/CartView.jsx` — displays and updates the cart.
+- `app/checkout/CheckoutForm.jsx` — handles interactive form submission, pending state, and validation messages.
 
-- `app/menu/[id]/AddToCartButton.jsx`
-  - button click
-  - dispatches cart action
+These components should use the `"use client"` directive when required by their implementation.
 
-- `app/cart/CartView.jsx`
-  - reads cart context
-  - removes items
-  - clears cart
+Only components that actually exist and are used in the application should be listed here. Additional helper components should be documented when their current implementation requires client-side behavior.
 
-- `app/checkout/CheckoutForm.jsx`
-  - useActionState
-  - form submission
-  - pending state
-  - validation messages
+## 4. Important Boundary Rules
 
-### Important Boundary Rule
+**Server Components** are responsible for server rendering, route structure, and server-side work.
 
-Interactive state stays in client components.
+**Client Components** are responsible for browser events, interactive state, and browser-dependent behavior.
 
-Server Components handle:
+The checkout page remains a Server Component, while its interactive form is isolated in `CheckoutForm.jsx`.
 
-- routing
-- data fetching
-- authentication checks
-- server rendering
+Server-side validation must remain on the server. Client-side validation can improve the user experience, but it must not replace server-side validation.
 
-Client Components handle:
+## 5. Error Handling
 
-- clicks
-- cart state
-- forms
-- browser interaction
+The menu error boundary is implemented in `app/menu/error.js`.
 
-The checkout page itself remains a Server Component while the
-interactive checkout form is isolated in `CheckoutForm.jsx`.
+It displays a helpful error message and a retry button when an error within its route segment is caught. The root layout is outside this segment-level boundary, allowing shared site navigation to remain available.
+
+## 6. Verification
+
+The production build was tested with:
+
+```bash
+npm run build
+```
+
+The build completed successfully, and the menu error boundary was manually tested using a temporary error that was subsequently removed.
+
+The visible loading state still requires a separate successful runtime verification.

@@ -4,6 +4,7 @@
  */
 
 // Mock dish records
+import { cookies } from "next/headers";
 const mockDishes = [
   {
     id: "dish_1",
@@ -122,5 +123,12 @@ export async function markCancelled(id) {
  * Read current authenticated user session
  */
 export async function getSession() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("addis-eats-session");
+
+  if (sessionCookie?.value !== "authenticated") {
+    return null;
+  }
+
   return mockSessionUser;
 }
