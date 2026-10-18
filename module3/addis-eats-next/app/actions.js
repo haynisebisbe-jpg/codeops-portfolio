@@ -1,3 +1,4 @@
+
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -9,8 +10,6 @@ import {
   getSession,
 } from "../lib/db";
 
-// Trusted server-side menu prices.
-// Never trust prices submitted by the browser.
 const trustedMenu = {
   "doro-wot": { name: "Doro Wot", price: 450 },
   "siga-wat": { name: "Siga Wat", price: 500 },
@@ -35,12 +34,20 @@ const trustedMenu = {
 };
 
 export async function placeOrder(prevState, formData) {
+  const session = await getSession();
+
+  if (!session || session.role !== "customer") {
+    return {
+      success: false,
+      error: "Please sign in as a customer before placing an order.",
+      fieldErrors: {},
+    };
+  }
+
   let submittedItems;
 
   try {
-    submittedItems = JSON.parse(
-      formData.get("items") || "[]"
-    );
+    submittedItems = JSON.parse(String(formData.get("items") || "[]"));
   } catch {
     submittedItems = [];
   }
@@ -60,7 +67,6 @@ export async function placeOrder(prevState, formData) {
     };
   }
 
-  // Verify every dish against the trusted server-side menu.
   const unknownDish = result.data.items.find(
     (item) => !trustedMenu[item.dishId]
   );
@@ -85,6 +91,14 @@ export async function placeOrder(prevState, formData) {
     };
   });
 
+  if (orderItems.length === 0) {
+    return {
+      success: false,
+      error: "Your cart is empty.",
+      fieldErrors: {},
+    };
+  }
+
   const total = orderItems.reduce(
     (sum, item) => sum + item.subtotal,
     0
@@ -97,9 +111,6 @@ export async function placeOrder(prevState, formData) {
       notes: result.data.notes,
       items: orderItems,
       total,
-
-      // Keep the original fields for compatibility with
-      // code that expects a single dish.
       dishId: orderItems[0].dishId,
       quantity: orderItems[0].quantity,
     });
@@ -137,14 +148,15 @@ export async function cancelOrder(orderId) {
   if (!order) {
     throw new Error("Order not found");
   }
-
-  if (order.userId !== session.id) {
-    throw new Error("You are not allowed to cancel this order");
-  }
+if (session.role !== "customer" || order.userId !== session.id) {
+  throw new Error("You are not allowed to cancel this order");
+}
+ 
 
   const cancelledOrder = await markCancelled(orderId);
 
   revalidatePath("/orders");
+  revalidatePath(`/orders/${orderId}`);
 
   return {
     success: true,

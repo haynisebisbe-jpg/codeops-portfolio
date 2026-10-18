@@ -1,16 +1,15 @@
+
 /**
  * In-memory mock database and helper utilities for Addis Eats.
- * Provides data access functions for dishes, orders, and session management.
  */
 
-// Mock dish records
-import { cookies } from "next/headers";
+import { getSession as getSignedSession } from "./session";
+
 const mockDishes = [
   {
     id: "dish_1",
     name: "Doro Wat",
-    description:
-      "Traditional spicy chicken stew served with injera and boiled egg.",
+    description: "Traditional spicy chicken stew served with injera and boiled egg.",
     price: 350,
     currency: "ETB",
     category: "Main",
@@ -37,8 +36,7 @@ const mockDishes = [
   {
     id: "dish_4",
     name: "Shiro Tegabeno",
-    description:
-      "Rich chickpea flour stew served bubbling hot in a clay pot.",
+    description: "Rich chickpea flour stew served bubbling hot in a clay pot.",
     price: 180,
     currency: "ETB",
     category: "Vegetarian",
@@ -46,47 +44,40 @@ const mockDishes = [
   },
 ];
 
-// In-memory orders store
-const mockOrders = globalThis.mockOrders ?? (globalThis.mockOrders = []);
-// Mock authenticated user session
-const mockSessionUser = {
-  id: "user_addis_101",
-  name: "Abebe Bikila",
-  email: "abebe@example.com",
-};
+const mockOrders =
+  globalThis.mockOrders ?? (globalThis.mockOrders = []);
 
-/**
- * ORM-style database query interface
- */
 export const db = {
   dish: {
     findMany: async () => [...mockDishes],
     findUnique: async ({ where }) =>
-      mockDishes.find((d) => d.id === where.id) || null,
+      mockDishes.find((dish) => dish.id === where.id) || null,
   },
-
   order: {
     findMany: async () => [...mockOrders],
   },
 };
 
-/**
- * Fetch a single dish by ID
- */
 export async function getDish(id) {
-  const dish = mockDishes.find((d) => d.id === id);
-  return dish || null;
+  return mockDishes.find((dish) => dish.id === id) || null;
 }
 
-/**
- * Create a new order in memory
- */
+export async function getSession() {
+  return getSignedSession();
+}
+
 export async function createOrder(data) {
+  const session = await getSignedSession();
+
+  if (!session || session.role !== "customer") {
+    throw new Error("Customer sign-in required");
+  }
+
   const newOrder = {
-    id: `ord_${Math.floor(100 + Math.random() * 900)}`,
+    id: `ord_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
     ...data,
+    userId: session.id,
     status: "PENDING",
-    userId: mockSessionUser.id,
     createdAt: new Date().toISOString(),
   };
 
@@ -94,40 +85,35 @@ export async function createOrder(data) {
   return newOrder;
 }
 
-/**
- * Retrieve a specific order by ID
- */
 export async function getOrder(id) {
-  const order = mockOrders.find((o) => o.id === id);
-  return order || null;
+  return mockOrders.find((order) => order.id === id) || null;
 }
-
-/**
- * Mark an order as cancelled
- */
+export async function getOrdersFor(userId) {
+  return mockOrders.filter((order) => order.userId === userId);
+}
 export async function markCancelled(id) {
-  const order = mockOrders.find((o) => o.id === id);
+  const session = await getSignedSession();
+
+  if (!session) {
+    throw new Error("Not signed in");
+  }
+
+  const order = await getOrder(id);
 
   if (!order) {
     throw new Error("Order not found");
+  }
+
+  if (session.role !== "customer" || order.userId !== session.id) {
+    throw new Error("You are not allowed to cancel this order");
+  }
+
+  if (order.status === "CANCELLED") {
+    throw new Error("Order is already cancelled");
   }
 
   order.status = "CANCELLED";
   order.updatedAt = new Date().toISOString();
 
   return order;
-}
-
-/**
- * Read current authenticated user session
- */
-export async function getSession() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("addis-eats-session");
-
-  if (sessionCookie?.value !== "authenticated") {
-    return null;
-  }
-
-  return mockSessionUser;
 }
