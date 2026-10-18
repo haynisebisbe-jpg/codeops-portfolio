@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AddToCartButton from "./AddToCartButton";
@@ -197,11 +198,14 @@ export default async function DishPage({ params }) {
 
         <h1>{dish.name}</h1>
 
-        <img
-          src={dish.image}
-          alt={dish.name}
-          className="dish-detail-image"
-        />
+        <Image
+  src={dish.image}
+  alt={dish.name}
+  width={800}
+  height={600}
+  className="dish-detail-image"
+  sizes="(max-width: 768px) 100vw, 800px"
+/>
 
         <span className="next-category">
           {dish.category}

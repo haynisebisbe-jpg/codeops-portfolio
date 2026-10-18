@@ -1,6 +1,6 @@
 
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -63,7 +63,13 @@ export default function DishGrid({ dishes }) {
         ) : (
           visibleDishes.map((dish) => (
             <article className="next-dish-card" key={dish.id}>
-              <img src={dish.image} alt={dish.name} />
+              <Image
+  src={dish.image}
+  alt={dish.name}
+  width={400}
+  height={300}
+  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+/>
 
               <div className="next-dish-body">
                 <span className="next-category">{dish.category}</span>

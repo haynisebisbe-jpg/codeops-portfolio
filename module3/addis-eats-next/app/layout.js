@@ -1,6 +1,11 @@
+ import { Inter } from "next/font/google";
 import Link from "next/link";
 import { Providers } from "./providers";
 import "./globals.css";
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "Addis Eats",
@@ -9,7 +14,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <body>
         <header className="next-header">
           <Link href="/" className="next-logo">
