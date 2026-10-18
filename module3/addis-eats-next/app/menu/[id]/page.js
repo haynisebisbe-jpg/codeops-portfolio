@@ -1,7 +1,10 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AddToCartButton from "./AddToCartButton";
+
+const SITE_URL = "https://addiseats.et";
 
 const dishes = [
   {
@@ -106,8 +109,7 @@ const dishes = [
     category: "Vegan",
     price: 350,
     image: "/images/Beyaynetu.jpeg",
-    description:
-      "A colorful combination of Ethiopian vegetarian dishes.",
+    description: "A colorful combination of Ethiopian vegetarian dishes.",
   },
   {
     id: "misir",
@@ -173,43 +175,92 @@ export function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const dish = dishes.find((item) => item.id === id);
+
+  if (!dish) {
+    return {
+      title: "Dish Not Found",
+      description: "This dish could not be found on Addis Eats.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  return {
+    title: dish.name,
+    description: `${dish.name} — ${dish.price} ETB. ${dish.description} Order from Addis Eats in Addis Ababa.`,
+    alternates: {
+      canonical: `https://addiseats.et/menu/${dish.id}`,
+    },
+    openGraph: {
+      title: `${dish.name} | Addis Eats`,
+      description: `${dish.name} for ${dish.price} ETB. ${dish.description}`,
+      url: `https://addiseats.et/menu/${dish.id}`,
+      images: [
+        {
+          url: dish.image,
+          alt: dish.name,
+        },
+      ],
+      type: "website",
+    },
+  };
+}
+
 export default async function DishPage({ params }) {
   const { id } = await params;
-
   const dish = dishes.find((item) => item.id === id);
 
   if (!dish) {
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "MenuItem",
+    name: dish.name,
+    description: dish.description,
+    image: `${SITE_URL}${encodeURI(dish.image)}`,
+    offers: {
+      "@type": "Offer",
+      url: `${SITE_URL}/menu/${dish.id}`,
+      price: dish.price,
+      priceCurrency: "ETB",
+    },
+  };
+
   return (
     <main className="next-page">
-      <Link
-        href="/menu"
-        className="next-back-link"
-      >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+
+      <Link href="/menu" className="next-back-link">
         ← Back to Menu
       </Link>
 
       <section className="next-empty-card">
-        <p className="next-eyebrow">
-          ADDIS EATS
-        </p>
+        <p className="next-eyebrow">ADDIS EATS</p>
 
         <h1>{dish.name}</h1>
 
         <Image
-  src={dish.image}
-  alt={dish.name}
-  width={800}
-  height={600}
-  className="dish-detail-image"
-  sizes="(max-width: 768px) 100vw, 800px"
-/>
+          src={dish.image}
+          alt={dish.name}
+          width={800}
+          height={600}
+          className="dish-detail-image"
+          sizes="(max-width: 768px) 100vw, 800px"
+        />
 
-        <span className="next-category">
-          {dish.category}
-        </span>
+        <span className="next-category">{dish.category}</span>
 
         <p>{dish.description}</p>
 
@@ -217,10 +268,7 @@ export default async function DishPage({ params }) {
 
         <AddToCartButton dish={dish} />
 
-        <Link
-          href="/cart"
-          className="next-button"
-        >
+        <Link href="/cart" className="next-button">
           View Cart
         </Link>
       </section>

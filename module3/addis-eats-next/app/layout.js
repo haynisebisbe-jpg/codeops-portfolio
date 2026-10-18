@@ -1,15 +1,31 @@
- import { Inter } from "next/font/google";
+
+import { Inter } from "next/font/google";
 import Link from "next/link";
 import { Providers } from "./providers";
 import "./globals.css";
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata = {
-  title: "Addis Eats",
-  description: "Authentic Ethiopian food, delivered with love.",
+  metadataBase: new URL("https://addiseats.et"),
+  title: {
+    template: "%s | Addis Eats",
+    default: "Addis Eats — Ethiopian Food Delivery in Addis Ababa",
+  },
+  description:
+    "Order Doro Wat, Tibs, Kitfo, and Shiro from Addis Eats. Enjoy authentic Ethiopian food delivered across Addis Ababa.",
+  openGraph: {
+    title: "Addis Eats — Ethiopian Food Delivery in Addis Ababa",
+    description:
+      "Discover authentic Ethiopian dishes, from Doro Wat to Kitfo, delivered across Addis Ababa.",
+    url: "https://addiseats.et",
+    siteName: "Addis Eats",
+    locale: "en_ET",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {

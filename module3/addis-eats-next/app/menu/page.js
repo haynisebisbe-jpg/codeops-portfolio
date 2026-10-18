@@ -5,6 +5,22 @@ import { dishes } from "../../lib/dishes";
 
 export const revalidate = 3600;
 
+export const metadata = {
+  title: "Menu",
+  description:
+    "Explore authentic Ethiopian food at Addis Eats, including Doro Wat, Tibs, Kitfo, and Shiro. Find your favorites and order in Addis Ababa.",
+  alternates: {
+    canonical: "https://addiseats.et/menu",
+  },
+  openGraph: {
+    title: "Our Menu | Addis Eats",
+    description:
+      "Discover traditional Ethiopian dishes, prepared with love and delivered across Addis Ababa.",
+    url: "https://addiseats.et/menu",
+    type: "website",
+  },
+};
+
 export default function MenuPage() {
   return (
     <main className="next-page">
