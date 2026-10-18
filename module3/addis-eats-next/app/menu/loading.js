@@ -1,8 +1,11 @@
+
 export default function Loading() {
   return (
-    <main className="next-page">
+    <main className="next-page" role="status" aria-live="polite">
       <div className="next-loading">
-        <div className="next-spinner">🍽️</div>
+        <div className="next-spinner" aria-hidden="true">
+          🍽️
+        </div>
 
         <h2>Preparing the menu...</h2>
 

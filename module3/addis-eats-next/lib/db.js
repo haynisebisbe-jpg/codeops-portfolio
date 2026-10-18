@@ -47,8 +47,7 @@ const mockDishes = [
 ];
 
 // In-memory orders store
-const mockOrders = [];
-
+const mockOrders = globalThis.mockOrders ?? (globalThis.mockOrders = []);
 // Mock authenticated user session
 const mockSessionUser = {
   id: "user_addis_101",

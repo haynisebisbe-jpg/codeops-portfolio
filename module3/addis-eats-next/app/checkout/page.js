@@ -1,16 +1,9 @@
-import { redirect } from "next/navigation";
-import { getSession } from "../../lib/db";
+
 import CheckoutForm from "./CheckoutForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function CheckoutPage() {
-  const session = await getSession();
-
-  if (!session) {
-    redirect("/");
-  }
-
+export default function CheckoutPage() {
   return (
     <main className="next-page">
       <section className="next-empty-card">
