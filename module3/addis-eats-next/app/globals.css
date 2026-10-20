@@ -1,3 +1,4 @@
+
 * {
   box-sizing: border-box;
 }
@@ -58,11 +59,7 @@ body {
   justify-content: center;
   padding: 60px 20px;
   text-align: center;
-  background: linear-gradient(
-    135deg,
-    #fff7ed,
-    #f7ead7
-  );
+  background: linear-gradient(135deg, #fff7ed, #f7ead7);
 }
 
 .next-hero {
@@ -79,7 +76,8 @@ body {
 }
 
 .next-hero h1,
-.next-page > h1 {
+.next-page > h1,
+.next-page-heading h1 {
   font-size: clamp(40px, 7vw, 72px);
   line-height: 1.05;
   margin: 0 0 20px;
@@ -125,14 +123,31 @@ body {
   margin-bottom: 40px;
 }
 
+/* MENU HEADING */
+
+.next-page-heading {
+  margin-bottom: 24px;
+}
+
+.next-page-heading > div {
+  max-width: 750px;
+}
+
+.next-page-heading h1 {
+  color: #2d2118;
+}
+
+.next-page-heading > div > p:last-child {
+  color: #69584a;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
 /* MENU */
 
 .next-dish-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(250px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 24px;
 }
 
@@ -291,34 +306,6 @@ body {
   margin: 0;
 }
 
-/* MOBILE */
-
-@media (max-width: 700px) {
-  .next-header {
-    padding: 15px 20px;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .next-nav {
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .next-page {
-    padding: 40px 18px;
-  }
-
-  .next-hero h1,
-  .next-page > h1 {
-    font-size: 42px;
-  }
-
-  .next-detail-image {
-    height: 280px;
-  }
-}
 /* MENU LAYOUT */
 
 .menu-layout {
@@ -373,20 +360,8 @@ body {
   min-width: 0;
 }
 
-@media (max-width: 800px) {
-  .menu-layout {
-    grid-template-columns: 1fr;
-  }
+/* CATEGORY BAR */
 
-  .menu-sidebar {
-    position: static;
-  }
-
-  .menu-sidebar nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-}
 .category-bar {
   display: flex;
   flex-wrap: wrap;
@@ -408,4 +383,49 @@ body {
 .category-bar button:hover {
   background: #a34a19;
   color: white;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+  .menu-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-sidebar {
+    position: static;
+  }
+
+  .menu-sidebar nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 700px) {
+  .next-header {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .next-nav {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .next-page {
+    padding: 40px 18px;
+  }
+
+  .next-hero h1,
+  .next-page > h1,
+  .next-page-heading h1 {
+    font-size: 42px;
+  }
+
+  .next-detail-image {
+    height: 280px;
+  }
 }
