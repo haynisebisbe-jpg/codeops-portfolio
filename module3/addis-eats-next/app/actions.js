@@ -140,26 +140,51 @@ export async function cancelOrder(orderId) {
   const session = await getSession();
 
   if (!session) {
-    throw new Error("Not signed in");
+    return {
+      success: false,
+      error: "Please sign in first.",
+    };
+  }
+
+  if (typeof orderId !== "string" || !orderId.trim()) {
+    return {
+      success: false,
+      error: "Invalid order ID.",
+    };
   }
 
   const order = await getOrder(orderId);
 
   if (!order) {
-    throw new Error("Order not found");
+    return {
+      success: false,
+      error: "Order not found.",
+    };
   }
-if (session.role !== "customer" || order.userId !== session.id) {
-  throw new Error("You are not allowed to cancel this order");
-}
- 
 
-  const cancelledOrder = await markCancelled(orderId);
+  if (session.role !== "customer" || order.userId !== session.id) {
+    return {
+      success: false,
+      error: "You are not allowed to cancel this order.",
+    };
+  }
 
-  revalidatePath("/orders");
-  revalidatePath(`/orders/${orderId}`);
+  try {
+    const cancelledOrder = await markCancelled(orderId);
 
-  return {
-    success: true,
-    order: cancelledOrder,
-  };
+    revalidatePath("/orders");
+    revalidatePath(`/orders/${orderId}`);
+
+    return {
+      success: true,
+      order: cancelledOrder,
+    };
+  } catch (error) {
+    console.error("cancelOrder error:", error);
+
+    return {
+      success: false,
+      error: "Could not cancel the order. Please try again.",
+    };
+  }
 }

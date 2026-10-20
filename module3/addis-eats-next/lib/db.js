@@ -9,7 +9,8 @@ const mockDishes = [
   {
     id: "dish_1",
     name: "Doro Wat",
-    description: "Traditional spicy chicken stew served with injera and boiled egg.",
+    description:
+      "Traditional spicy chicken stew served with injera and boiled egg.",
     price: 350,
     currency: "ETB",
     category: "Main",
@@ -27,7 +28,8 @@ const mockDishes = [
   {
     id: "dish_3",
     name: "Kitfo",
-    description: "Minced beef seasoned with mitmita and niter kibbeh.",
+    description:
+      "Minced beef seasoned with mitmita and niter kibbeh.",
     price: 400,
     currency: "ETB",
     category: "Main",
@@ -36,7 +38,8 @@ const mockDishes = [
   {
     id: "dish_4",
     name: "Shiro Tegabeno",
-    description: "Rich chickpea flour stew served bubbling hot in a clay pot.",
+    description:
+      "Rich chickpea flour stew served bubbling hot in a clay pot.",
     price: 180,
     currency: "ETB",
     category: "Vegetarian",
@@ -46,6 +49,14 @@ const mockDishes = [
 
 const mockOrders =
   globalThis.mockOrders ?? (globalThis.mockOrders = []);
+
+const VALID_ORDER_STATUSES = [
+  "PENDING",
+  "PREPARING",
+  "READY",
+  "DELIVERED",
+  "CANCELLED",
+];
 
 export const db = {
   dish: {
@@ -88,9 +99,50 @@ export async function createOrder(data) {
 export async function getOrder(id) {
   return mockOrders.find((order) => order.id === id) || null;
 }
+
 export async function getOrdersFor(userId) {
   return mockOrders.filter((order) => order.userId === userId);
 }
+
+// Staff-only: retrieve every order, newest first.
+export async function getAllOrdersForStaff() {
+  const session = await getSignedSession();
+
+  if (!session || session.role !== "staff") {
+    throw new Error("Staff access required");
+  }
+
+  return [...mockOrders].sort(
+    (a, b) =>
+      new Date(b.createdAt).getTime() -
+      new Date(a.createdAt).getTime()
+  );
+}
+
+// Staff-only: update an order's status.
+export async function updateOrderStatusForStaff(id, status) {
+  const session = await getSignedSession();
+
+  if (!session || session.role !== "staff") {
+    throw new Error("Staff access required");
+  }
+
+  if (!VALID_ORDER_STATUSES.includes(status)) {
+    throw new Error("Invalid order status");
+  }
+
+  const order = await getOrder(id);
+
+  if (!order) {
+    throw new Error("Order not found");
+  }
+
+  order.status = status;
+  order.updatedAt = new Date().toISOString();
+
+  return order;
+}
+
 export async function markCancelled(id) {
   const session = await getSignedSession();
 
