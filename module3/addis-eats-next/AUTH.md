@@ -1,62 +1,61 @@
-# Addis Eats — Day 42 Authentication
+# AUTH.md — Addis Eats Authentication and Authorization
 
-## Authentication approach
+## 1. Authentication
 
-This coursework demo uses a signed session cookie. The session payload contains a user ID, role, and expiration time.
+Addis Eats uses a signed session cookie to identify signed-in users.
 
-The session cookie is configured with:
+- Session cookie: HTTP-only.
+- Session lifetime: 7 days.
+- Session signing: HMAC using `SESSION_SECRET`.
+- Customer demo account: configured using `DEMO_LOGIN` and `DEMO_PASSWORD`.
+- Staff demo account: configured using `DEMO_STAFF_LOGIN` and `DEMO_STAFF_PASSWORD`.
 
-- `httpOnly: true`
-- `secure: true` in production
-- `sameSite: "lax"`
-- `path: "/"`
-- A seven-day expiration
+Production requirements:
+- Set a strong, randomly generated `SESSION_SECRET` of at least 32 characters.
+- Store secrets in environment variables, never in source code.
+- Never expose passwords or session secrets in logs or client responses.
+- Use HTTPS in production.
 
-## Demo accounts
+## 2. Authorization
 
-- Customer username: `student`
-- Staff username: `kitchen`
-
-Passwords are configured locally in `.env.local`. Never commit this environment file or expose its contents.
-
-## Protected routes and layers
-
-| Route or operation | Protection |
+| Route | Access policy |
 |---|---|
-| `/checkout` | Proxy redirect and server-side checks |
-| `/orders` | Proxy redirect and signed-session check |
-| `/orders/[id]` | Signed-session check and order-ownership check |
-| `/kitchen` | Signed-session check and staff-role check |
-| `POST /api/orders` | Authentication, customer-role check, and input validation |
-| `GET /api/orders/[id]` | Authentication and order-ownership check; staff may view orders |
-| Order cancellation action | Authentication and order-ownership check |
-| Sign-in redirect destination | Validated to reject external redirect URLs |
+| `/menu` | Public |
+| `/orders` | Signed-in customer; own orders only |
+| `/orders/[id]` | Customer must own the order; staff may view orders |
+| `/checkout` | Signed-in customer |
+| `/kitchen` | Staff only |
+| `/api/orders` | Customer session required for order creation |
+| `/api/orders/[id]` | Session and order ownership checks |
+| `/api/kitchen/orders` | Staff-only order listing and status updates |
 
-### 1. Next.js Proxy
+## 3. Security layers
 
-The Proxy checks for a session cookie and redirects requests without one away from checkout and order routes. Cookie presence alone does not prove that a session is valid; server-side code must verify the signed session.
+1. Middleware/proxy provides route-level access control where configured.
+2. Server pages verify the user's session and role.
+3. Server actions and API routes must independently verify authorization before sensitive operations.
 
-### 2. Server-rendered pages
+Never trust a role, user ID, price, order total, or order status supplied by the browser.
 
-Protected pages verify the signed session and check the user's identity or role before displaying protected content. Customers can only view their own orders. The kitchen page requires the `staff` role.
+## 4. Validation
 
-### 3. Server actions and API handlers
+- Validate required customer fields on the server.
+- Validate order items against trusted menu data.
+- Calculate prices and totals on the server.
+- Allow only approved order statuses.
+- Check ownership before returning or modifying customer orders.
 
-Protected operations verify authentication and authorization on the server. Order IDs supplied by the browser are not proof of permission. Order creation uses trusted server-side dish prices rather than trusting client-submitted prices.
+## 5. Current limitations
 
-## Verification performed
+The project currently uses demo credentials and an in-memory mock database. This is suitable for development, not production. Replace demo authentication and mock storage with production-ready identity management and persistent storage before launch.
 
-- `npm run build` completed successfully.
-- Signed-out access to `/orders` redirected to sign-in.
-- The staff demo account accessed `/kitchen`.
-- The customer demo account received an access-denied response from `/kitchen`.
-- An external sign-in redirect destination was rejected, and sign-in returned to the local home page.
-- Unauthenticated order API requests returned `401 Authentication required`.
+## 6. Testing checklist
 
-## Limitations
-
-This is an educational mock implementation. Orders are held in memory and disappear when the server process restarts. Demo accounts use environment-configured credentials rather than a user database and password hashing.
-
-The order-ownership check is implemented in the order page and API. A full cross-customer ownership test still needs a second customer account and an order belonging to that account.
-
-For a real application, use a maintained authentication solution such as Auth.js, persistent storage, hashed passwords, rate limiting, and appropriate production session management.
+- [x] Customer can sign in and place an order.
+- [x] Staff can access the kitchen dashboard.
+- [x] Customer can view their own order.
+- [x] Kitchen status changes are visible to the customer.
+- [ ] Verify unauthorized API requests return appropriate errors.
+- [ ] Verify one customer cannot view another customer's order.
+- [ ] Verify customer accounts cannot update kitchen order statuses.
+- [ ] Verify production secrets and secure cookie settings.

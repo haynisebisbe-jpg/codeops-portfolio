@@ -1,5 +1,5 @@
-
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -8,11 +8,16 @@ export default function DishGrid({ dishes }) {
   const searchParams = useSearchParams();
 
   const selectedCategory = searchParams.get("category") || "All";
-  const searchTerm = (searchParams.get("search") || "").trim().toLowerCase();
-  const requestedPage = Math.max(1, Number(searchParams.get("page")) || 1);
+  const searchTerm = (searchParams.get("search") || "")
+    .trim()
+    .toLowerCase();
+  const requestedPage = Math.max(
+    1,
+    Number(searchParams.get("page")) || 1
+  );
+
   const pageSize = 6;
 
-  // Filter dishes by category and search term.
   const filteredDishes = dishes.filter((dish) => {
     const matchesCategory =
       selectedCategory === "All" ||
@@ -27,10 +32,14 @@ export default function DishGrid({ dishes }) {
     return matchesCategory && matchesSearch;
   });
 
-  // Calculate pages and select only the dishes for this page.
-  const totalPages = Math.max(1, Math.ceil(filteredDishes.length / pageSize));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredDishes.length / pageSize)
+  );
+
   const currentPage = Math.min(requestedPage, totalPages);
   const startIndex = (currentPage - 1) * pageSize;
+
   const visibleDishes = filteredDishes.slice(
     startIndex,
     startIndex + pageSize
@@ -46,6 +55,7 @@ export default function DishGrid({ dishes }) {
     }
 
     const query = params.toString();
+
     window.history.pushState(
       null,
       "",
@@ -64,21 +74,30 @@ export default function DishGrid({ dishes }) {
           visibleDishes.map((dish) => (
             <article className="next-dish-card" key={dish.id}>
               <Image
-  src={dish.image}
-  alt={dish.name}
-  width={400}
-  height={300}
-  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-/>
+                className="next-dish-image"
+                src={dish.image}
+                alt={dish.name}
+                width={400}
+                height={300}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+              />
 
               <div className="next-dish-body">
-                <span className="next-category">{dish.category}</span>
+                <span className="next-category">
+                  {dish.category}
+                </span>
+
                 <h2>{dish.name}</h2>
+
                 <p>{dish.description}</p>
 
                 <div className="next-dish-footer">
                   <strong>{dish.price} ETB</strong>
-                  <Link href={`/menu/${dish.id}`} className="next-button">
+
+                  <Link
+                    href={`/menu/${dish.id}`}
+                    className="next-button"
+                  >
                     View Dish
                   </Link>
                 </div>
@@ -92,7 +111,9 @@ export default function DishGrid({ dishes }) {
         <div className="next-pagination">
           <button
             type="button"
-            onClick={() => goToPage(Math.max(1, currentPage - 1))}
+            onClick={() =>
+              goToPage(Math.max(1, currentPage - 1))
+            }
             disabled={currentPage === 1}
           >
             Previous
@@ -104,7 +125,9 @@ export default function DishGrid({ dishes }) {
 
           <button
             type="button"
-            onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
+            onClick={() =>
+              goToPage(Math.min(totalPages, currentPage + 1))
+            }
             disabled={currentPage === totalPages}
           >
             Next

@@ -1,27 +1,76 @@
-# Day 41 — Data Fetching
+# DATA.md — Addis Eats Data Design
 
-## Menu Search and Pagination
-- Menu search uses SWR to fetch matching dishes from `/api/menu`.
-- Search input is debounced by 400 milliseconds.
-- The menu displays 6 dishes per page.
-- Pagination updates the page query parameter.
-- Previous results remain visible while new results load.
+## 1. Current data storage
 
-## Order Status Polling
-- Order tracking page: `/orders/[id]`.
-- API endpoint: `/api/orders/[id]`.
-- The initial order is loaded on the server.
-- SWR refreshes the order status every 5 seconds.
-- The last available status remains visible if a refresh fails.
+The current application uses an in-memory mock database in `lib/db.js`.
 
-## Mock Database
-- `lib/db.js` stores orders in memory.
-- Orders may be lost when the server restarts.
-- This mock database is for learning and development, not production persistence.
+This supports development and testing but is not persistent. Orders may be lost when the server restarts, and in-memory data is not shared reliably across multiple production instances.
 
-## Day 41 Test Results
-- [x] Menu search and pagination tested.
-- [x] Order creation tested.
-- [x] Order API returns the created order.
-- [x] Order tracking displays the pending status.
-- [x] Five-second polling configured.
+## 2. Main entities
+
+### Dish
+- `id`
+- `name`
+- `price`
+- `description`
+- `image`
+- `category` (where available)
+
+### Order
+- `id`
+- `userId`
+- `name`
+- `phone`
+- `notes`
+- `items`
+- `total`
+- `status`
+- `createdAt`
+- `updatedAt` (when a status is updated)
+
+Each order item includes its dish ID, name, price, quantity, and subtotal.
+
+## 3. Order status lifecycle
+
+Supported statuses:
+
+1. `PENDING`
+2. `PREPARING`
+3. `READY`
+4. `DELIVERED`
+5. `CANCELLED`
+
+The kitchen dashboard polls for order updates every five seconds.
+
+## 4. Data access rules
+
+- Customers can retrieve only their own orders.
+- Staff can retrieve orders for kitchen operations.
+- Only authorized staff may update kitchen order statuses.
+- Order prices and totals must be calculated from trusted server-side menu data.
+- API responses should expose only information needed by the requesting user.
+
+## 5. Recommended production database
+
+Replace the in-memory mock database with a persistent database such as PostgreSQL.
+
+Recommended tables:
+- `users`
+- `dishes`
+- `orders`
+- `order_items`
+
+Use foreign keys, server-side validation, database transactions for order creation, and indexes on order ownership and creation time.
+
+## 6. Data integrity
+
+- Store order items separately from the order header.
+- Preserve the agreed price for each item at the time of purchase.
+- Validate quantities and dish availability.
+- Calculate the order total on the server.
+- Enforce allowed status transitions.
+- Use database transactions to prevent incomplete orders.
+
+## 7. Current limitations
+
+The application is still using mock storage. Persistent database storage, database-level constraints, and production data migration remain future work.

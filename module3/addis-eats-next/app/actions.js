@@ -14,11 +14,11 @@ const trustedMenu = {
   "doro-wot": { name: "Doro Wot", price: 450 },
   "siga-wat": { name: "Siga Wat", price: 500 },
   "beg-alicha": { name: "Beg Alicha", price: 480 },
-  "shiro-tegamino": { name: "Shiro Tegamino", price: 280 },
+  "shiro-tegamino": { name: "ShiroTegamino", price: 280 },
   "shiro-bozena": { name: "Shiro Bozena", price: 350 },
   "derek-tibs": { name: "Derek Tibs", price: 550 },
   "awaze-tibs": { name: "Awaze Tibs", price: 520 },
-  "quanta-firfir": { name: "Quanta Firfir", price: 400 },
+  "quanta-firfir": { name: "QuantaFirfir", price: 400 },
   "asa-tibs": { name: "Asa Tibs", price: 450 },
   kitfo: { name: "Kitfo", price: 550 },
   "gored-gored": { name: "Gored Gored", price: 550 },
@@ -32,6 +32,8 @@ const trustedMenu = {
   buna: { name: "Buna", price: 100 },
   tea: { name: "Ethiopian Tea", price: 80 },
 };
+
+const validAreas = ["Bole", "Kazanchis", "Megenagna", "Piassa"];
 
 export async function placeOrder(prevState, formData) {
   const session = await getSession();
@@ -52,6 +54,8 @@ export async function placeOrder(prevState, formData) {
     submittedItems = [];
   }
 
+  const area = String(formData.get("area") || "");
+
   const result = orderSchema.safeParse({
     name: formData.get("name"),
     phone: formData.get("phone"),
@@ -64,6 +68,14 @@ export async function placeOrder(prevState, formData) {
       success: false,
       error: "Please correct the errors below.",
       fieldErrors: result.error.flatten().fieldErrors,
+    };
+  }
+
+  if (!validAreas.includes(area)) {
+    return {
+      success: false,
+      error: "Please select a valid delivery area.",
+      fieldErrors: {},
     };
   }
 
@@ -109,6 +121,7 @@ export async function placeOrder(prevState, formData) {
       name: result.data.name,
       phone: result.data.phone,
       notes: result.data.notes,
+      area,
       items: orderItems,
       total,
       dishId: orderItems[0].dishId,
@@ -118,6 +131,8 @@ export async function placeOrder(prevState, formData) {
     revalidatePath("/checkout");
     revalidatePath("/cart");
     revalidatePath("/orders");
+    revalidatePath("/analytics");
+    revalidatePath("/kitchen");
 
     return {
       success: true,
@@ -174,6 +189,8 @@ export async function cancelOrder(orderId) {
 
     revalidatePath("/orders");
     revalidatePath(`/orders/${orderId}`);
+    revalidatePath("/analytics");
+    revalidatePath("/kitchen");
 
     return {
       success: true,
@@ -184,7 +201,7 @@ export async function cancelOrder(orderId) {
 
     return {
       success: false,
-      error: "Could not cancel the order. Please try again.",
+      error: error.message || "Could not cancel the order.",
     };
   }
 }

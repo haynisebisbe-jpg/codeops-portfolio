@@ -1,38 +1,58 @@
+# PERF.md — Addis Eats Performance Budget
 
-# Day 43 — Performance and Environment
+## 1. Performance targets
 
-## Optimizations completed
+| Metric | Target |
+|---|---:|
+| Largest Contentful Paint (LCP) | Under 2.5 seconds |
+| Cumulative Layout Shift (CLS) | Under 0.1 |
+| First Load JS for `/menu` | Under 120 kB |
+| Largest image | Under 150 kB |
+| Lighthouse Performance score | 90 or higher |
 
-- Replaced standard HTML image elements with Next.js `Image`.
-- Added image width, height, and responsive `sizes` attributes.
-- Configured the Inter font using `next/font/google`.
-- Set `display: "swap"` to help text appear while the font loads.
-- Added `.env.example` with placeholder values only.
-- Confirmed `.env*` is listed in `.gitignore`.
+These are target budgets, not confirmed measurements.
 
-## Third-party scripts
+## 2. Rendering strategy
 
-No third-party script usage was found in the `app` directory during the source search.
+- `/`: Static landing page where appropriate.
+- `/menu`: Incremental Static Regeneration with a 3600-second revalidation interval.
+- `/menu/[id]`: Static generation using `generateStaticParams`.
+- `/cart`: Client-side cart interactions.
+- `/checkout`: Dynamic server rendering and server-side validation.
+- `/orders` and `/kitchen`: Dynamic pages requiring authenticated session data.
 
-## Production build
+## 3. Optimization approach
 
-- Command: `npm run build`
-- Result: Passed.
-- The menu is configured for revalidation every hour.
+- Use Next.js image optimization where appropriate.
+- Compress and resize food images.
+- Prefer modern image formats when supported.
+- Avoid unnecessary client components.
+- Keep client-side JavaScript small.
+- Use server components for content that does not require browser interaction.
+- Use loading and error boundaries where appropriate.
+- Avoid layout shifts by reserving image dimensions.
+- Keep API responses small and avoid unnecessary requests.
 
-## Lighthouse measurements
+## 4. Measurement procedure
 
-- Device: Mobile
-- Browser: Chrome
-- Environment: Local production build
-- IndexedDB warning: Lighthouse reported that stored browser data might affect the measurement.
-- Performance score: Not recorded
-- LCP: Not recorded
-- CLS: Not recorded
-- INP: Not recorded
+1. Run `npm run build`.
+2. Run `npm run start` to test the production build.
+3. Open the application in Chrome.
+4. Open Developer Tools and run Lighthouse on the menu page.
+5. Record LCP, CLS, Performance score, and image sizes.
+6. Measure the `/menu` JavaScript bundle using the production build output.
+7. Compare measured results with the targets above.
 
-Measurements are not recorded because a clean, reliable Lighthouse result was not obtained. No performance numbers have been estimated or invented.
+## 5. Current status
 
-## Follow-up
+The production build completed successfully. The project includes static menu generation and a one-hour revalidation interval.
 
-Run Lighthouse again after resolving the IndexedDB warning and record the actual Performance score, LCP, CLS, and INP values.
+The performance targets have not yet been verified with Lighthouse or bundle-size measurements. Record actual results here after testing; do not mark a target as passed without measurement.
+
+## 6. Follow-up improvements
+
+- Optimize the largest food images.
+- Review client bundle size for `/menu`.
+- Run Lighthouse against the production server.
+- Investigate Edge Runtime deprecation and static-generation warnings.
+- Repeat measurements after performance changes.
